@@ -63,17 +63,103 @@ def initialize_app():
     # Apply styles
     StyleManager.apply_global_styles()
     StyleManager.apply_theme_styles(st.session_state.theme_mode)
-    # Sidebar chat styles (message bubbles)
-    st.markdown(
-        """
+    # Professional sidebar chat styles
+    st.markdown(f"""
         <style>
-        .sb-chat-title {font-weight: 700; font-size: 18px; margin-bottom: 8px;}
-        .sb-chip {display:inline-block; padding:6px 10px; border-radius:999px; font-size:12px; margin-right:6px; background:rgba(255,255,255,0.06);}
-        .msg-wrap {max-height: 58vh; overflow-y: auto; padding-right: 4px;}
-        .msg {margin: 6px 0; padding: 10px 12px; border-radius: 10px; line-height: 1.35;}
-        .msg-user {background: rgba(56,68,255,0.18); border: 1px solid rgba(56,68,255,0.35);} 
-        .msg-assist {background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08);} 
-        .msg-role {font-size: 11px; opacity: 0.7; margin-bottom: 4px;}
+        /* Professional Sidebar Styles */
+        .sb-chat-title {{
+            font-weight: 700; 
+            font-size: 1.125rem; 
+            margin-bottom: 12px;
+            color: inherit;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }}
+        
+        .sb-chip {{
+            display: inline-block; 
+            padding: 8px 12px; 
+            border-radius: 20px; 
+            font-size: 0.75rem; 
+            font-weight: 600;
+            margin-right: 8px; 
+            margin-bottom: 6px;
+            background: {StyleManager.COLORS['primary_gradient']};
+            color: white;
+            border: none;
+            transition: all 0.2s ease;
+        }}
+        
+        .sb-chip:hover {{
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(79, 70, 229, 0.3);
+        }}
+        
+        .msg-wrap {{
+            max-height: 60vh; 
+            overflow-y: auto; 
+            padding-right: 6px;
+            margin: 16px 0;
+        }}
+        
+        .msg {{
+            margin: 10px 0; 
+            padding: 12px 16px; 
+            border-radius: 16px; 
+            line-height: 1.4;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+        }}
+        
+        .msg:hover {{
+            transform: translateY(-1px);
+        }}
+        
+        .msg-user {{
+            background: {StyleManager.COLORS['primary_gradient']}; 
+            color: white;
+            border: none;
+            margin-left: 20px;
+            border-bottom-right-radius: 6px;
+        }}
+        
+        .msg-assist {{
+            background: rgba(255, 255, 255, 0.08); 
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: inherit;
+            margin-right: 20px;
+            border-bottom-left-radius: 6px;
+            backdrop-filter: blur(8px);
+        }}
+        
+        .msg-role {{
+            font-size: 0.625rem; 
+            opacity: 0.7; 
+            margin-bottom: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }}
+        
+        /* Sidebar scrollbar */
+        .msg-wrap::-webkit-scrollbar {{
+            width: 6px;
+        }}
+        
+        .msg-wrap::-webkit-scrollbar-track {{
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+        }}
+        
+        .msg-wrap::-webkit-scrollbar-thumb {{
+            background: {StyleManager.COLORS['primary_gradient']};
+            border-radius: 3px;
+        }}
+        
+        .msg-wrap::-webkit-scrollbar-thumb:hover {{
+            background: linear-gradient(135deg, {StyleManager.COLORS['primary_light']} 0%, {StyleManager.COLORS['primary_dark']} 100%);
+        }}
         </style>
         """,
         unsafe_allow_html=True,
@@ -85,20 +171,69 @@ def get_resume_parser():
     return ResumeParser()
 
 def display_header():
-    """Display application header"""
-    # Theme toggle
-    theme = st.toggle("🌙 Dark Mode" if st.session_state.theme_mode == "light" else "☀️ Light Mode")
-    st.session_state.theme_mode = "light" if theme else "dark"
-    StyleManager.apply_theme_styles(st.session_state.theme_mode)
+    """Display professional application header"""
+    # Apply animations
+    st.markdown(StyleManager.get_animation_styles(), unsafe_allow_html=True)
     
-    # Main header
-    st.markdown("""
-        <div style="text-align: center; margin-bottom: 2rem;">
-            <h1 style="font-size: 3em; margin-bottom: 0.2rem;">InternHunt</h1>
-            <h3 style="color: #ccc; margin-top: 0;">Resume Analyzer</h3>
-            <p style="color: #aaa; font-size: 1.1em;">
-                Upload your resume and get smart internship recommendations based on your skills.
+    # Theme toggle in sidebar for cleaner header
+    with st.sidebar:
+        theme = st.toggle("🌙 Dark Mode" if st.session_state.theme_mode == "light" else "☀️ Light Mode")
+        st.session_state.theme_mode = "light" if theme else "dark"
+        StyleManager.apply_theme_styles(st.session_state.theme_mode)
+    
+    # Professional header with modern design
+    st.markdown(f"""
+        <div class="animated-header" style="text-align: center; margin-bottom: 3rem; padding: 2rem 0;">
+            <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
+                <div style="
+                    width: 64px; 
+                    height: 64px; 
+                    background: {StyleManager.COLORS['primary_gradient']}; 
+                    border-radius: 16px; 
+                    display: flex; 
+                    align-items: center; 
+                    justify-content: center; 
+                    margin-right: 20px;
+                    box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.4);
+                ">
+                    <span style="font-size: 28px; color: white;">🎯</span>
+                </div>
+                <div>
+                    <h1 class="typography-h1" style="margin: 0; background: {StyleManager.COLORS['primary_gradient']}; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                        InternHunt
+                    </h1>
+                </div>
+            </div>
+            <h2 class="typography-h3" style="color: inherit; margin: 0 0 1rem 0; font-weight: 600; opacity: 0.8;">
+                AI-Powered Resume Analyzer
+            </h2>
+            <p class="typography-body-large" style="color: inherit; max-width: 600px; margin: 0 auto; opacity: 0.7; line-height: 1.7;">
+                Transform your career journey with intelligent resume analysis, personalized job recommendations, and skill insights powered by advanced AI.
             </p>
+            
+            <div class="pro-grid pro-grid-3" style="max-width: 800px; margin: 2rem auto 0; gap: 1rem;">
+                <div class="pro-alert pro-alert-info" style="margin: 0; text-align: left;">
+                    <span style="font-size: 1.2rem;">📊</span>
+                    <div>
+                        <strong>Smart Analysis</strong><br>
+                        <small>AI-powered skill extraction</small>
+                    </div>
+                </div>
+                <div class="pro-alert pro-alert-success" style="margin: 0; text-align: left;">
+                    <span style="font-size: 1.2rem;">🎯</span>
+                    <div>
+                        <strong>Job Matching</strong><br>
+                        <small>Personalized recommendations</small>
+                    </div>
+                </div>
+                <div class="pro-alert pro-alert-warning" style="margin: 0; text-align: left;">
+                    <span style="font-size: 1.2rem;">💬</span>
+                    <div>
+                        <strong>AI Assistant</strong><br>
+                        <small>Interactive career guidance</small>
+                    </div>
+                </div>
+            </div>
         </div>
     """, unsafe_allow_html=True)
 
@@ -151,11 +286,11 @@ def categorize_skills(skills):
     return {k: v for k, v in categories.items() if v}
 
 def display_skills(categorized_skills):
-    """Display categorized skills with styling"""
+    """Display categorized skills with professional styling"""
     st.markdown(StyleManager.get_skills_styles(), unsafe_allow_html=True)
     
     st.markdown("""
-        <div class="skills-header">
+        <div class="skills-header animate-fade-in">
             <div class="skills-header-icon">🛠️</div>
             <h2 class="skills-header-text">SKILLS EXTRACTED</h2>
         </div>
@@ -163,7 +298,7 @@ def display_skills(categorized_skills):
     
     category_icons = {
         "Technical Skills": "💻",
-        "Hardware/Electrical Engineering": "🔌",
+        "Hardware/Electrical Engineering": "🔌", 
         "Soft Skills": "🤝",
         "Data Science/Analytics": "📊",
         "Design/Creative": "🎨",
@@ -174,20 +309,23 @@ def display_skills(categorized_skills):
     css_class_map = {
         "Technical Skills": "tech-skill",
         "Hardware/Electrical Engineering": "hardware-skill",
-        "Soft Skills": "soft-skill",
+        "Soft Skills": "soft-skill", 
         "Data Science/Analytics": "data-skill",
+        "Design/Creative": "design-skill",
+        "Business/Management": "business-skill",
         "Other": "other-skill"
     }
     
     html_output = '<div class="skills-container">'
     
+    delay_counter = 0
     for category, skills in categorized_skills.items():
         if skills:
             icon = category_icons.get(category, "✨")
             css_class = css_class_map.get(category, "tech-skill")
             
             html_output += f'''
-            <div class="skill-section">
+            <div class="skill-section animate-fade-in animate-delay-{min(delay_counter * 100, 400)}">
                 <h3 class="skill-category">
                     <span class="category-icon">{icon}</span> {category}
                 </h3>
@@ -198,6 +336,7 @@ def display_skills(categorized_skills):
                 html_output += f'<span class="skill-tag {css_class}">{skill}</span>'
             
             html_output += '</div></div>'
+            delay_counter += 1
     
     html_output += '</div>'
     st.markdown(html_output, unsafe_allow_html=True)
