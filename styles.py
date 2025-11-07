@@ -4,15 +4,20 @@ import streamlit as st
 class StyleManager:
     """Manages all CSS styles for the application with a modern, professional design system"""
     
-    # Professional Color Palette
+    # Professional Color Palette - Enhanced Purple & Dark Theme
     COLORS = {
-        # Primary Colors - Modern Blue-Purple Gradient
-        'primary': '#4F46E5',          # Indigo-600
-        'primary_light': '#6366F1',     # Indigo-500
-        'primary_dark': '#3730A3',      # Indigo-700
-        'primary_gradient': 'linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%)',
+        # Primary Colors - Modern Purple-Indigo Gradient
+        'primary': '#6366F1',          # Indigo-500
+        'primary_light': '#818CF8',     # Indigo-400
+        'primary_dark': '#4F46E5',      # Indigo-600
+        'primary_gradient': 'linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%)',
         
-        # Accent Colors
+        # Secondary Purple Tones
+        'purple_600': '#7C3AED',        # Purple-600
+        'purple_500': '#A78BFA',        # Purple-400
+        'purple_dark': '#5B21B6',       # Purple-800
+        
+        # Accent Colors - Vibrant Green
         'accent': '#10B981',            # Emerald-500
         'accent_light': '#34D399',      # Emerald-400
         'accent_dark': '#059669',       # Emerald-600
@@ -29,11 +34,11 @@ class StyleManager:
         'gray_800': '#1F2937',
         'gray_900': '#111827',
         
-        # Dark Theme Colors
-        'dark_bg': '#0F172A',           # Slate-900
-        'dark_surface': '#1E293B',      # Slate-800
-        'dark_card': '#334155',         # Slate-700
-        'dark_border': '#475569',       # Slate-600
+        # Dark Theme Colors - Deep Purple-Tinted
+        'dark_bg': '#0D1429',           # Very Dark Blue-Purple
+        'dark_surface': '#1A1F3A',      # Dark Blue-Purple Surface
+        'dark_card': '#242F5C',         # Card Background with Purple tint
+        'dark_border': '#3A4570',       # Border Purple-tint
         
         # Light Theme Colors
         'light_bg': '#FFFFFF',
@@ -112,9 +117,9 @@ class StyleManager:
         .main .block-container {{
             padding-top: 2rem;
             padding-bottom: 3rem;
-            max-width: 1200px;
-            padding-left: 2rem;
-            padding-right: 2rem;
+            max-width: 1100px;
+            padding-left: 1.25rem;
+            padding-right: 1.25rem;
         }}
         
         /* Hide Streamlit Elements */
@@ -1187,6 +1192,7 @@ class StyleManager:
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
             border: 1px solid rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(16px);
+            animation: fadeSlideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }}
         
         /* Professional Chat Header */
@@ -1239,15 +1245,17 @@ class StyleManager:
             align-items: center;
             gap: 10px;
             padding: 8px 16px;
-            background: rgba(16, 185, 129, 0.15);
-            border: 1px solid rgba(16, 185, 129, 0.3);
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.28);
             border-radius: 24px;
-            color: {StyleManager.COLORS['success']};
             font-size: 0.75rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }}
+        .chat-status .status-online {{ color: #22c55e; text-shadow: 0 0 6px rgba(34, 197, 94, 0.35); }}
+        .chat-status span {{ color: #22c55e; }}
+        .status-online {{ color: #22c55e; animation: statusPulse 1.2s ease-in-out infinite; }}
         
         .status-dot {{
             width: 10px;
@@ -1503,6 +1511,25 @@ class StyleManager:
         
         .chat-messages::-webkit-scrollbar-thumb:hover {{
             background: linear-gradient(135deg, {StyleManager.COLORS['primary_light']} 0%, {StyleManager.COLORS['primary_dark']} 100%);
+        }}
+        
+        /* Section dividers */
+        .section-divider, .section-divider-lg {{
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            margin: 40px 0;
+        }}
+        .section-divider-lg {{ height: 2px; opacity: 0.9; }}
+        
+        /* Sticky chat input */
+        .chat-input {{
+            position: sticky;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            padding: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            z-index: 10;
         }}
         
         /* Light Theme Adjustments */
