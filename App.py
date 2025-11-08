@@ -1821,7 +1821,7 @@ def course_recommender(course_list):
     no_of_reco = st.selectbox(
         "Select how many recommendations you want to explore:",
         options=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-        index=4,
+        index=5,
         key="courses_selectbox"
     )
 
