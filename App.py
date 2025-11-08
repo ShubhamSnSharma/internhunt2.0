@@ -1312,26 +1312,57 @@ def display_job_recommendations_dual(skills_list, keywords_text: str, location_t
     else:
         st.info("No opportunities found based on your skills.")
 
-    # Section: Internshala
-    st.markdown(
-        """
-        <div class="animated-header" style="
-            background-color: #1e1e1e;
-            padding: 0.8rem;
-            border-left: 6px solid #34d399;
+    # ======== Internshala Section (Improved UI) ========
+st.markdown("""
+<div style="
+    background: linear-gradient(135deg, rgba(34,197,94,0.15), rgba(16,185,129,0.15));
+    border: 1px solid rgba(34,197,94,0.25);
+    border-left: 6px solid #10b981;
+    border-radius: 12px;
+    padding: 1.2rem 1.6rem;
+    margin-top: 2rem;
+    margin-bottom: 1.2rem;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+    transition: all 0.3s ease;
+">
+    <h2 style="
+        color: #ecfdf5;
+        margin: 0;
+        font-size: 1.6rem;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+    ">
+        🇮🇳 Internships from <span style="color:#34d399;">Internshala (India)</span>
+    </h2>
+</div>
+""", unsafe_allow_html=True)
+
+# ======== Search Status (Cleaner Style) ========
+if predicted_category:
+    st.markdown(f"""
+    <div style="
+        background: rgba(59,130,246,0.12);
+        border: 1px solid rgba(59,130,246,0.25);
+        border-radius: 10px;
+        padding: 10px 16px;
+        color: #bfdbfe;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 1rem;
+    ">
+        🎯 Searching for <b style='color:#e0f2fe;'>{predicted_category}</b> internships using keywords:
+        <code style="
+            background: rgba(59,130,246,0.15);
+            color: #93c5fd;
+            padding: 3px 6px;
             border-radius: 6px;
-            margin-top: 1.6rem;
-            margin-bottom: 0.6rem;
-        ">
-            <h2 style='color: #ffffff; margin: 0;'>🇮🇳 Internships from Internshala (India)</h2>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-    
-    # Show what we're searching for (helps with debugging)
-    if predicted_category:
-        st.info(f"🎯 Searching for **{predicted_category}** internships using keywords: '{query_str}'")
+            font-size: 0.9rem;
+        ">'{query_str}'</code>
+    </div>
+    """, unsafe_allow_html=True)
     
     # Separate Internshala keyword + location inputs
     c_ik, c_il, c_ib = st.columns([3, 2, 1])
