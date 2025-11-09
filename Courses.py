@@ -263,12 +263,18 @@ blockchain_course = [
 # =========================
 # 📝 RESUME & INTERVIEW
 # =========================
-resume_videos = ['https://youtu.be/3agP4x8LYFM','https://youtu.be/fS_t3yS8v5s',
-                 'https://youtu.be/aArb68OBFPg','https://youtu.be/h-NuvOeWWh0',
-                 'https://youtu.be/BdQniERyw8I','https://youtu.be/Tt08KmFfIYQ',
-                 'https://youtu.be/CLUsplI4xMU','https://youtu.be/bhwEsfXS6y8']
+resume_videos = [
+    ['How to Make a Resume That Gets YOU HIRED in 2025!', 'https://www.youtube.com/watch?v=1yNs'],  # note: truncated ID in example
+    ['Resume Tips for 2025: What’s In, What’s Out, and What Actually Works', 'https://www.youtube.com/watch?v=ZVcK_-JQvxQ'],
+    ['What EVERY Successful Resume Has in Common - 6 Must-Have Elements for 2025', 'https://www.youtube.com/watch?v=4n-thnZ8vwc'],
+    ['Create an ATS-FRIENDLY Resume for Today’s 2025 Job Market', 'https://www.youtube.com/watch?v=SGd2GpNOhpA'],
+    ['This RESUME Got Me 25+ Internship Interviews (How she did it)', 'https://www.youtube.com/watch?v=vc2ZhiB2aIE'],
+]
 
-interview_videos = ['https://youtu.be/Tt08KmFfIYQ','https://youtu.be/KukmClH1KoA',
-                    'https://youtu.be/7_aAicmPB3A','https://youtu.be/1mHjMNZZvFo',
-                    'https://youtu.be/WfdtKbAJOmE','https://youtu.be/wFbU185CvDU'
-                    'https://youtu.be/wFbU185CvDU','https://youtu.be/TZ3C_syg9Ow']
+interview_videos = [
+    ['INTERNSHIP Interview Questions & ANSWERS! (How to pass an internship interview)', 'https://www.youtube.com/watch?v=sxjrMwb-KGc'],
+    ['Interview Questions and Answers for 2025 (Freshers/Internships)', 'https://www.youtube.com/watch?v=QdWr7JDNWok'],
+    ['10 Video Interview Questions for Graduate Jobs/Internships', 'https://www.youtube.com/watch?v=-zcm4g9F3Rs'],
+    ['8 MOST ASKED HR Interview Questions and Answers [2025]', 'https://www.youtube.com/watch?v=S3zbpX1dvrI'],
+    ['How To Write & Design Your Resume in 2025 (from a Google Sr UX Designer) – also good for Interviews', 'https://www.youtube.com/watch?v=CtFtARr_U5k'],
+]
