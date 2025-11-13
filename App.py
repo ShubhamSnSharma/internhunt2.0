@@ -671,51 +671,38 @@ def _load_nevera_font():
         return ""
 
 def display_header():
-    """Display a modern, consistently aligned hero section across local and cloud deployment."""
-    import streamlit as st
-
-    # Apply animations and theme
+    """Display professional application header with ultra-modern design"""
+    # Apply animations
     st.markdown(StyleManager.get_animation_styles(), unsafe_allow_html=True)
     
-    # Sidebar theme toggle
+    # Theme toggle in sidebar for cleaner header
     with st.sidebar:
         theme = st.toggle("🌙 Dark Mode" if st.session_state.theme_mode == "light" else "☀️ Light Mode")
         st.session_state.theme_mode = "light" if theme else "dark"
         StyleManager.apply_theme_styles(st.session_state.theme_mode)
-
+    
     # Load font inline
     font_b64 = _load_nevera_font()
-
-    # Unified and deployment-safe hero section
+    
+    # Ultra-professional header with modern design  
     st.markdown(f"""
     <style>
     /* ---------------- CUSTOM FONT ---------------- */
     @font-face {{
         font-family: 'Nevera';
-        src: url('data:application/x-font-opentype;base64,{font_b64}') format('opentype');
+        src: url('data:application/x-font-opentype;base64,{font_b64}') format('opentype'),
+             url('data:font/otf;base64,{font_b64}') format('opentype');
         font-weight: 400;
         font-style: normal;
-        font-display: swap; /* Prevent layout shift while loading */
+        font-display: swap;
     }}
-
-    /* ---------------- STREAMLIT CONTAINER FIX ---------------- */
-    .block-container {{
-        max-width: 100% !important;
-        padding: 0 !important;
-        margin: 0 auto !important;
-        display: flex;
-        justify-content: center;
-    }}
-
+    
     /* ---------------- HERO SECTION ---------------- */
     .hero-section {{
         position: relative;
         background: radial-gradient(120% 160% at 50% 10%, #0e132a 20%, #0b1028 100%);
-        width: 100%;
-        max-width: 900px;
-        margin: auto;
+        padding: 100px 20px 120px;
         text-align: center;
-        padding: clamp(60px, 10vw, 120px) 1rem;
         border-radius: 20px;
         overflow: hidden;
         box-shadow: 0 8px 40px rgba(0,0,0,0.25);
@@ -727,7 +714,7 @@ def display_header():
         box-shadow: 0 12px 45px rgba(0,0,0,0.3);
     }}
 
-    /* Background gradient animation */
+    /* Subtle background animation with moving gradient */
     .hero-section::before {{
         content: "";
         position: absolute;
@@ -737,12 +724,13 @@ def display_header():
         animation: moveGradient 10s ease-in-out infinite alternate;
         z-index: 0;
     }}
+
     @keyframes moveGradient {{
-        0% {{ background-position: 0% 50%; }}
-        100% {{ background-position: 100% 50%; }}
+        0%% {{ background-position: 0% 50%; }}
+        100%% {{ background-position: 100% 50%; }}
     }}
 
-    /* Halo glow (prevent overflow shifting) */
+    /* Glow halo */
     .hero-section::after {{
         content: "";
         position: absolute;
@@ -751,19 +739,25 @@ def display_header():
         transform: translateX(-50%);
         width: 1000px;
         height: 1000px;
-        background: radial-gradient(circle at 50% 50%, rgba(56,189,248,0.1), rgba(99,102,241,0.05) 70%, transparent 100%);
+        background: radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.1), rgba(99, 102, 241, 0.05) 70%, transparent 100%);
         filter: blur(120px);
         z-index: 0;
         animation: pulseGlow 8s ease-in-out infinite alternate;
-        pointer-events: none;
-        overflow: hidden;
-    }}
-    @keyframes pulseGlow {{
-        0% {{ opacity: 0.8; transform: translateX(-50%) scale(1); }}
-        100% {{ opacity: 1; transform: translateX(-50%) scale(1.08); }}
     }}
 
-    /* ---------------- TEXT ---------------- */
+    @keyframes pulseGlow {{
+        0%% {{ opacity: 0.8; transform: translateX(-50%) scale(1); }}
+        100%% {{ opacity: 1; transform: translateX(-50%) scale(1.08); }}
+    }}
+
+    /* ============ UNIFIED ANIMATIONS ============ */
+    /* Smooth fade-up animation with cubic-bezier easing */
+    @keyframes fadeUp {{
+        0%% {{ opacity: 0; transform: translateY(40px); }}
+        100%% {{ opacity: 1; transform: translateY(0); }}
+    }}
+
+    /* ---------------- TEXT STYLING ---------------- */
     .hero-badge {{
         display: inline-block;
         background: rgba(99,102,241,0.15);
@@ -779,46 +773,51 @@ def display_header():
         margin-bottom: 28px;
         letter-spacing: 0.5px;
         text-shadow: 0 0 10px rgba(165,180,252,0.3);
+        animation: fadeUp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         position: relative;
         z-index: 2;
-        animation: fadeUp 0.8s ease-out;
     }}
-
+    
     .hero-branding {{
-        font-family: 'Nevera', 'Inter', sans-serif !important;
-        font-size: clamp(2.5rem, 6vw, 5.5rem);
+        font-family: 'Nevera', 'Helvetica Neue', Arial, sans-serif !important;
+        font-size: 5.5rem;
         font-weight: 400;
         color: #fff;
         margin-bottom: 25px;
         margin-top: 20px;
         letter-spacing: 0.18em;
+        animation: fadeUp 1s cubic-bezier(0.4, 0, 0.2, 1), gradientFlow 6s ease-in-out infinite alternate;
         position: relative;
         z-index: 2;
         text-transform: uppercase;
+        font-feature-settings: 'kern' 1;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
         background: linear-gradient(100deg, #8b5cf6, #2dd4bf, #38bdf8, #8b5cf6);
         background-size: 200% 200%;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
-        animation: gradientFlow 6s ease-in-out infinite alternate, fadeUp 1s ease-out;
     }}
+
     @keyframes gradientFlow {{
-        0% {{ background-position: 0% 50%; }}
-        100% {{ background-position: 100% 50%; }}
+        0%% {{ background-position: 0% 50%; }}
+        100%% {{ background-position: 100% 50%; }}
     }}
 
     .hero-title {{
         font-family: 'Inter', sans-serif;
-        font-size: clamp(1.8rem, 4vw, 2.8rem);
+        font-size: 2.8rem;
         font-weight: 700;
         color: #f1f5f9;
         margin-bottom: 20px;
         line-height: 1.2;
         letter-spacing: -0.02em;
+        animation: fadeUp 1.1s cubic-bezier(0.4, 0, 0.2, 1);
         position: relative;
         z-index: 2;
-        animation: fadeUp 1.1s ease-out;
     }}
+
     .hero-title span {{
         color: #2cb67d;
         background: linear-gradient(135deg, #7f5af0, #2cb67d);
@@ -829,22 +828,24 @@ def display_header():
 
     .hero-desc {{
         font-family: 'Inter', sans-serif;
-        font-size: clamp(0.95rem, 2vw, 1.1rem);
-        color: #94a3b8;
+        font-size: 1.05rem;
+        font-weight: 400;
+        color: var(--text-muted);
         max-width: 700px;
         margin: 0 auto;
         line-height: 1.6;
         letter-spacing: 0.01em;
+        animation: fadeUp 1.2s cubic-bezier(0.4, 0, 0.2, 1);
         position: relative;
         z-index: 2;
-        animation: fadeUp 1.2s ease-out;
     }}
 
-    /* ---------------- BUTTON ---------------- */
+    /* ---------------- CTA BUTTON ---------------- */
     .hero-cta {{
         text-align: center;
         margin-top: 32px;
     }}
+
     .cta-button {{
         display: inline-block;
         margin-top: 32px;
@@ -857,13 +858,16 @@ def display_header():
         font-weight: 600;
         text-decoration: none;
         box-shadow: 0 8px 20px rgba(99,102,241,0.3);
+        backdrop-filter: blur(10px);
         transition: all 0.3s ease-in-out;
         cursor: pointer;
         font-size: 1.05rem;
         letter-spacing: 0.02em;
+        animation: fadeUp 1.2s cubic-bezier(0.4, 0, 0.2, 1);
         position: relative;
         overflow: hidden;
     }}
+    
     .cta-button::before {{
         content: "";
         position: absolute;
@@ -874,24 +878,52 @@ def display_header():
         background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
         transition: left 0.5s ease;
     }}
+    
     .cta-button:hover::before {{
         left: 100%;
     }}
+
     .cta-button:hover {{
         transform: translateY(-2px);
         box-shadow: 0 12px 30px rgba(99,102,241,0.5);
     }}
+    
     .cta-button:active {{
         transform: translateY(0px);
         box-shadow: 0 4px 15px rgba(99,102,241,0.4);
     }}
 
-    /* ---------------- ANIMATIONS ---------------- */
-    @keyframes fadeUp {{
-        0% {{ opacity: 0; transform: translateY(40px); }}
-        100% {{ opacity: 1; transform: translateY(0); }}
+    /* Scroll target for upload section */
+    #upload-section {{
+        scroll-margin-top: 20px;
     }}
 
+    /* ---------------- RESPONSIVE DESIGN ---------------- */
+    @media (max-width: 1024px) {{
+        .hero-section {{ padding: 80px 20px 100px; }}
+        .hero-branding {{ font-size: 4rem; }}
+        .hero-title {{ font-size: 2.1rem; line-height: 1.2; }}
+        .hero-desc {{ font-size: 1rem; max-width: 600px; line-height: 1.6; }}
+        .hero-badge {{ font-size: 0.85rem; }}
+        .cta-button {{ font-size: 1rem; padding: 12px 32px; }}
+    }}
+
+    @media (max-width: 768px) {{
+        .hero-section {{ padding: 60px 16px 80px; }}
+        .hero-branding {{ font-size: 3rem; letter-spacing: 0.12em; }}
+        .hero-title {{ font-size: 1.7rem; line-height: 1.25; }}
+        .hero-desc {{ font-size: 0.95rem; max-width: 100%; padding: 0 10px; line-height: 1.6; }}
+        .hero-badge {{ font-size: 0.8rem; padding: 6px 16px; }}
+        .cta-button {{ font-size: 0.95rem; padding: 12px 28px; margin-top: 24px; }}
+    }}
+
+    @media (max-width: 480px) {{
+        .hero-section {{ padding: 50px 12px 70px; }}
+        .hero-branding {{ font-size: 2.2rem; }}
+        .hero-title {{ font-size: 1.6rem; line-height: 1.3; }}
+        .hero-desc {{ font-size: 0.9rem; line-height: 1.6; }}
+        .hero-badge {{ font-size: 0.75rem; padding: 5px 14px; }}
+    }}
     </style>
 
     <!-- HERO SECTION -->
@@ -908,7 +940,8 @@ def display_header():
             <a href="#upload-section" class="cta-button">Upload Resume</a>
         </div>
     </div>
-    """, unsafe_allow_html=True)
+""", unsafe_allow_html=True)
+
 
 def get_table_download_link(df, filename, text):
     """Generate download link for dataframe"""
