@@ -2397,15 +2397,34 @@ def main():
         choice = st.sidebar.selectbox("Select Mode", activities)
         
         st.sidebar.markdown("""
-            <div style='text-align: center; font-size: 11px; color: #64748b; 
-                        padding: 1rem 0; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 2rem;'>
-                <div style='margin-bottom: 0.5rem; color: #94a3b8;'> 2024 InternHunt</div>
-                <div>Developed by 
-                <a href='https://www.linkedin.com/in/shubham-sharma-163a962a9' target='_blank'>Shubham</a>, 
-                <a href='https://www.linkedin.com/in/abhinav-ghangas-5a3b8128a' target='_blank'>Abhinav</a>, 
-                <a href='https://www.linkedin.com/in/pragya-9974b1298' target='_blank'>Pragya</a>
-                </div>
-            </div>
+        <style>
+        .sidebar-footer {
+            text-align: center;
+            color: rgba(255,255,255,0.4);
+            font-size: 0.8rem;
+            margin-top: 60px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 12px;
+            font-family: 'Inter', sans-serif;
+        }
+        .sidebar-footer a {
+            color: #2dd4bf;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+        .sidebar-footer a:hover {
+            color: #8b5cf6;
+            text-decoration: none;
+        }
+        </style>
+        <div class='sidebar-footer'>
+            © 2025 InternHunt <br>
+            Developed by 
+            <a href='https://shubhamsn.vercel.app' target='_blank'>Shubham</a>, 
+            <a href='https://www.linkedin.com/in/abhinav-ghangas-5a3b8128a' target='_blank'>Abhinav</a>, 
+            <a href='https://www.linkedin.com/in/pragya-9974b1298' target='_blank'>Pragya</a>
+        </div>
         """, unsafe_allow_html=True)
         
         if choice == 'User':
