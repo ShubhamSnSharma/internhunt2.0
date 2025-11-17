@@ -2353,6 +2353,23 @@ def main():
         st.markdown("<hr style='margin: 40px 0; border: none; border-top: 1px solid rgba(255,255,255,0.1);' />", unsafe_allow_html=True)
         
         # Sidebar with icons
+        st.markdown("""
+        <style>
+        .sidebar-header {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #8b5cf6;
+            margin: 20px 0 10px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 0 0 8px rgba(139,92,246,0.5);
+        }
+        </style>
+        """, unsafe_allow_html=True)
+        
+        st.sidebar.markdown("<div class='sidebar-header'>InternHunt Panel</div>", unsafe_allow_html=True)
         activities = ["User", "Admin"]
         choice = st.sidebar.selectbox("Select Mode", activities)
         
