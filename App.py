@@ -2355,31 +2355,6 @@ def main():
         # Sidebar with icons
         st.markdown("""
         <style>
-        /* Animated gradient sidebar edge */
-        [data-testid="stSidebar"]::before {
-            content: "";
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 3px;
-            height: 100%;
-            background: linear-gradient(180deg, #8b5cf6, #2dd4bf, #38bdf8);
-            background-size: 300% 300%;
-            animation: sidebarGlow 6s ease-in-out infinite alternate;
-            z-index: 1;
-        }
-        
-        @keyframes sidebarGlow {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 100% 50%; }
-        }
-        
-        /* Ensure sidebar content stays above the gradient line */
-        [data-testid="stSidebar"] > div:first-child > div:first-child {
-            position: relative;
-            z-index: 2;
-        }
-        
         .sidebar-header {
             font-family: 'Inter', sans-serif;
             font-size: 1rem;
