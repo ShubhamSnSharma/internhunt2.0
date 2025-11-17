@@ -2353,29 +2353,13 @@ def main():
         st.markdown("<hr style='margin: 40px 0; border: none; border-top: 1px solid rgba(255,255,255,0.1);' />", unsafe_allow_html=True)
         
         # Sidebar with icons
-        st.sidebar.markdown("""
-            <h3 style='margin-top: 0;'>👤 User Selection</h3>
-        """, unsafe_allow_html=True)
-        
         activities = ["User", "Admin"]
-        choice = st.sidebar.selectbox("Choose your role", activities, label_visibility="collapsed")
-        
-        st.sidebar.markdown("<hr/>", unsafe_allow_html=True)
-        
-        # Add info panel
-        st.sidebar.markdown("""
-            <div style='background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); 
-                        border-radius: 8px; padding: 1rem; margin-bottom: 1.5rem;'>
-                <div style='font-size: 0.85rem; color: #94a3b8; margin-bottom: 0.5rem;'>📊 Dashboard</div>
-                <div style='font-size: 0.9rem; font-weight: 500;'>InternHunt AI</div>
-                <div style='font-size: 0.75rem; color: #64748b; margin-top: 0.25rem;'>Resume Analysis & Job Matching</div>
-            </div>
-        """, unsafe_allow_html=True)
+        choice = st.sidebar.selectbox("Select Mode", activities)
         
         st.sidebar.markdown("""
             <div style='text-align: center; font-size: 11px; color: #64748b; 
                         padding: 1rem 0; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 2rem;'>
-                <div style='margin-bottom: 0.5rem; color: #94a3b8;'>© 2024 InternHunt</div>
+                <div style='margin-bottom: 0.5rem; color: #94a3b8;'> 2024 InternHunt</div>
                 <div>Developed by 
                 <a href='https://www.linkedin.com/in/shubham-sharma-163a962a9' target='_blank'>Shubham</a>, 
                 <a href='https://www.linkedin.com/in/abhinav-ghangas-5a3b8128a' target='_blank'>Abhinav</a>, 
