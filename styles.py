@@ -1179,6 +1179,630 @@ class StyleManager:
         """
     
     @staticmethod
+    def get_scroll_indicator_styles():
+        """Get scroll indicator (mouse) animation styles"""
+        return """
+        <style>
+        /* ---------------- SCROLL INDICATOR ---------------- */
+        .hero-cta {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .scroll-indicator {
+            display: inline-block;
+            position: relative;
+            width: 26px;
+            height: 42px;
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .scroll-indicator::before {
+            content: '';
+            position: absolute;
+            top: 6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 2px;
+            animation: mouse-scroll 2s infinite;
+            -webkit-animation: mouse-scroll 2s infinite;
+        }
+
+        .scroll-indicator:hover {
+            border-color: #fff;
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+        }
+
+        @keyframes mouse-scroll {
+            0% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+        }
+
+        @-webkit-keyframes mouse-scroll {
+            0% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+        }
+        </style>
+        """
+    
+    @staticmethod
+    def get_hero_section(font_b64=""):
+        """Get complete hero section with CSS and HTML markup
+        
+        Args:
+            font_b64: Base64 encoded font data for Nevera font
+            
+        Returns:
+            str: Complete HTML/CSS for hero section
+        """
+        return f"""
+        <style>
+        /* ---------------- CUSTOM FONT ---------------- */
+        @font-face {{
+            font-family: 'Nevera';
+            src: url('data:application/x-font-opentype;base64,{font_b64}') format('opentype'),
+                 url('data:font/otf;base64,{font_b64}') format('opentype');
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }}
+        
+        /* ---------------- HERO SECTION ---------------- */
+        .hero-section {{
+            position: relative;
+            background: radial-gradient(120% 160% at 50% 10%, #0e132a 20%, #0b1028 100%);
+            padding: 100px 20px 120px;
+            text-align: center;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.25);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }}
+
+        .hero-section:hover {{
+            transform: scale(1.005);
+            box-shadow: 0 12px 45px rgba(0,0,0,0.3);
+        }}
+
+        /* Subtle background animation with moving gradient */
+        .hero-section::before {{
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, rgba(124,58,237,0.1), rgba(45,212,191,0.1), rgba(124,58,237,0.1), rgba(45,212,191,0.1));
+            background-size: 200% 200%;
+            animation: moveGradient 10s ease-in-out infinite alternate;
+            z-index: 0;
+        }}
+
+        @keyframes moveGradient {{
+            0% {{ background-position: 0% 50%; }}
+            100% {{ background-position: 100% 50%; }}
+        }}
+
+        /* Glow halo */
+        .hero-section::after {{
+            content: "";
+            position: absolute;
+            top: -150px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1000px;
+            height: 1000px;
+            background: radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.1), rgba(99, 102, 241, 0.05) 70%, transparent 100%);
+            filter: blur(120px);
+            z-index: 0;
+            animation: pulseGlow 8s ease-in-out infinite alternate;
+        }}
+
+        @keyframes pulseGlow {{
+            0% {{ opacity: 0.8; transform: translateX(-50%) scale(1); }}
+            100% {{ opacity: 1; transform: translateX(-50%) scale(1.08); }}
+        }}
+
+        /* ============ UNIFIED ANIMATIONS ============ */
+        /* Smooth fade-up animation with cubic-bezier easing */
+        @keyframes fadeUp {{
+            0% {{ opacity: 0; transform: translateY(40px); }}
+            100% {{ opacity: 1; transform: translateY(0); }}
+        }}
+
+        /* ---------------- TEXT STYLING ---------------- */
+        .hero-badge {{
+            display: inline-block;
+            background: rgba(99,102,241,0.15);
+            border: 1px solid rgba(99,102,241,0.3);
+            box-shadow: inset 0 0 10px rgba(255,255,255,0.05);
+            backdrop-filter: blur(15px);
+            color: #a5b4fc;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 28px;
+            letter-spacing: 0.5px;
+            text-shadow: 0 0 10px rgba(165,180,252,0.3);
+            animation: fadeUp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            z-index: 2;
+        }}
+        
+        .hero-branding {{
+            font-family: 'Nevera', 'Helvetica Neue', Arial, sans-serif !important;
+            font-size: 5.5rem;
+            font-weight: 400;
+            color: #fff;
+            margin-bottom: 25px;
+            margin-top: 20px;
+            letter-spacing: 0.18em;
+            animation: fadeUp 1s cubic-bezier(0.4, 0, 0.2, 1), gradientFlow 6s ease-in-out infinite alternate;
+            position: relative;
+            z-index: 2;
+            text-transform: uppercase;
+            font-feature-settings: 'kern' 1;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background: linear-gradient(100deg, #8b5cf6, #2dd4bf, #38bdf8, #8b5cf6);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }}
+
+        @keyframes gradientFlow {{
+            0% {{ background-position: 0% 50%; }}
+            100% {{ background-position: 100% 50%; }}
+        }}
+
+        .hero-title {{
+            font-family: 'Inter', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+            animation: fadeUp 1.1s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            z-index: 2;
+        }}
+
+        .hero-title span {{
+            color: #2cb67d;
+            background: linear-gradient(135deg, #7f5af0, #2cb67d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }}
+
+        .hero-desc {{
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 400;
+            color: #94a3b8;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            line-height: 1.7;
+            letter-spacing: 0.01em;
+            padding: 0 10px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }}
+
+        /* Scroll target for upload section */
+        #upload-section {{
+            scroll-margin-top: 20px;
+        }}
+
+        /* ---------------- RESPONSIVE DESIGN ---------------- */
+        @media (max-width: 1024px) {{
+            .hero-section {{ padding: 80px 20px 100px; }}
+            .hero-branding {{ font-size: 4rem; }}
+            .hero-title {{ font-size: 2.1rem; line-height: 1.2; }}
+            .hero-desc {{ font-size: 1rem; max-width: 600px; line-height: 1.6; }}
+            .hero-badge {{ font-size: 0.85rem; }}
+            .cta-button {{ font-size: 1rem; padding: 12px 32px; }}
+        }}
+
+        @media (max-width: 768px) {{
+            .hero-section {{ padding: 60px 16px 80px; }}
+            .hero-branding {{ font-size: 3rem; letter-spacing: 0.12em; }}
+            .hero-title {{ font-size: 1.7rem; line-height: 1.25; }}
+            .hero-desc {{ font-size: 0.95rem; max-width: 100%; padding: 0 10px; line-height: 1.6; }}
+            .hero-badge {{ font-size: 0.8rem; padding: 6px 16px; }}
+            .cta-button {{ font-size: 0.95rem; padding: 12px 28px; margin-top: 24px; }}
+        }}
+
+        @media (max-width: 480px) {{
+            .hero-section {{ padding: 50px 12px 70px; }}
+            .hero-branding {{ font-size: 2.2rem; }}
+            .hero-title {{ font-size: 1.6rem; line-height: 1.3; }}
+            .hero-desc {{ font-size: 0.9rem; line-height: 1.6; }}
+            .hero-badge {{ font-size: 0.75rem; padding: 5px 14px; }}
+        }}
+        </style>
+
+        <!-- HERO SECTION -->
+        <div class="hero-section">
+            <div class="hero-badge">⚡ Intelligent Internship Matching Using ML, APIs & Web Data</div>
+            <div class="hero-branding">INTERNHUNT</div>
+            <h1 class="hero-title">Find Internships That <span>Fit You</span></h1>
+            <div class="hero-cta">
+                <a href="#upload-section" class="scroll-indicator" title="Scroll down to upload"></a>
+            </div>
+        </div>
+        """
+    
+    @staticmethod
+    def get_streamlit_component_overrides():
+        """Get CSS overrides for Streamlit components with dark theme styling
+        
+        Returns:
+            str: CSS for overriding default Streamlit component styles
+        """
+        return """
+        <style>
+            :root {
+                --primary: #6366F1;
+                --primary-light: #818CF8;
+                --primary-dark: #4F46E5;
+                --secondary: #8B5CF6;
+                --accent: #10B981;
+                --dark-bg: #0A0E27;
+                --dark-surface: #141A35;
+                --dark-card: #1A1F3A;
+                --dark-border: #2D3748;
+                --text-primary: #F8FAFC;
+                --text-secondary: #9CA3AF;
+                --gradient-primary: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+                --gradient-secondary: linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%);
+                --glow-primary: 0 0 20px rgba(99, 102, 241, 0.3);
+                --glow-secondary: 0 0 30px rgba(139, 92, 246, 0.4);
+            }
+            
+            /* Base styles with animations */
+            .stApp {
+                background: linear-gradient(135deg, #0A0E27 0%, #0F1532 50%, #141A35 100%);
+                color: var(--text-primary);
+                background-attachment: fixed;
+            }
+            
+            /* Sidebar */
+            .css-1d391kg, .e1fqkh3o3 {
+                background: linear-gradient(180deg, #141A35 0%, #1A1F3A 100%) !important;
+                border-right: 1px solid rgba(99, 102, 241, 0.1) !important;
+            }
+            
+            /* File uploader */
+            .stFileUploader > div > div > div > button {
+                background: var(--primary);
+                color: white !important;
+                border: none;
+                border-radius: 8px;
+                padding: 0.5rem 1rem;
+                transition: all 0.2s ease;
+            }
+            
+            .stFileUploader > div > div > div > button:hover {
+                background: var(--primary-light);
+                transform: translateY(-1px);
+            }
+            
+            /* File uploader text */
+            .stFileUploader > div > div > div > div > div > div {
+                color: #E2E8F0 !important;  /* Lighter text color for better visibility */
+                background-color: #1E293B;   /* Dark background for the text area */
+                padding: 8px 12px;          /* Add some padding around the text */
+                border-radius: 4px;          /* Rounded corners */
+                border: 1px solid #475569;   /* Subtle border */
+                margin-top: 4px;            /* Add some space above the text */
+            }
+            
+            .stFileUploader > div > div > div > div > div > div::before {
+                color: #E2E8F0 !important;  /* Lighter color for the icon */
+                margin-right: 8px;          /* Add space between icon and text */
+            }
+            
+            .stFileUploader > div > div > div > div > div > div::after {
+                color: #E2E8F0 !important;  /* Lighter color for any after content */
+            }
+            
+            /* Make the file name more visible */
+            .stFileUploader > div > div > div > div > div > div > span {
+                color: #E2E8F0 !important;
+                font-weight: 500;           /* Slightly bolder text */
+            }
+            
+            /* Buttons - Professional Styling */
+            .stButton > button {
+                background: var(--gradient-primary);
+                color: white;
+                border: 2px solid transparent;
+                border-radius: 10px;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                font-weight: 600;
+                box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2);
+                position: relative;
+                overflow: hidden;
+            }
+            
+            .stButton > button::before {
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 0;
+                height: 0;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.1);
+                transform: translate(-50%, -50%);
+                transition: width 0.6s, height 0.6s;
+            }
+            
+            .stButton > button:hover {
+                background: var(--gradient-secondary);
+                box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4), var(--glow-secondary);
+                transform: translateY(-2px);
+            }
+            
+            .stButton > button:hover::before {
+                width: 300px;
+                height: 300px;
+            }
+            
+            .stButton > button:active {
+                transform: translateY(0);
+                box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2);
+            }
+            
+            /* Input fields - Enhanced */
+            .stTextInput > div > div > input,
+            .stTextArea > div > div > textarea {
+                background-color: rgba(26, 31, 58, 0.8);
+                color: var(--text-primary);
+                border: 2px solid rgba(99, 102, 241, 0.2);
+                border-radius: 10px;
+                transition: all 0.3s ease;
+                padding: 12px 16px !important;
+                font-size: 14px;
+            }
+            
+            .stTextInput > div > div > input:focus,
+            .stTextArea > div > div > textarea:focus {
+                border-color: #6366F1;
+                box-shadow: 0 0 20px rgba(99, 102, 241, 0.3), inset 0 0 10px rgba(99, 102, 241, 0.1);
+                background-color: rgba(26, 31, 58, 1);
+            }
+            
+            /* Select boxes - Enhanced */
+            .stSelectbox > div > div > div {
+                background-color: rgba(26, 31, 58, 0.8);
+                color: var(--text-primary);
+                border: 2px solid rgba(99, 102, 241, 0.2);
+                border-radius: 10px;
+                transition: all 0.3s ease;
+            }
+            
+            .stSelectbox > div > div > div:hover {
+                border-color: #6366F1;
+                background-color: rgba(26, 31, 58, 1);
+                box-shadow: 0 0 15px rgba(99, 102, 241, 0.2);
+            }
+        </style>
+        """
+    
+    @staticmethod
+    def get_sidebar_chat_styles():
+        """Get CSS styles for sidebar chat interface
+        
+        Returns:
+            str: CSS for sidebar chat components (messages, chips, scrollbar)
+        """
+        return f"""
+        <style>
+        /* Professional Sidebar Styles */
+        .sb-chat-title {{
+            font-weight: 700; 
+            font-size: 1.125rem; 
+            margin-bottom: 12px;
+            color: inherit;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }}
+        
+        .sb-chip {{
+            display: inline-block; 
+            padding: 8px 12px; 
+            border-radius: 20px; 
+            font-size: 0.75rem; 
+            font-weight: 600;
+            margin-right: 8px; 
+            margin-bottom: 6px;
+            background: {StyleManager.COLORS['primary_gradient']};
+            color: white;
+            border: none;
+            transition: all 0.2s ease;
+        }}
+        
+        .sb-chip:hover {{
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(79, 70, 229, 0.3);
+        }}
+        
+        .msg-wrap {{
+            max-height: 60vh; 
+            overflow-y: auto; 
+            padding-right: 6px;
+            margin: 16px 0;
+        }}
+        
+        .msg {{
+            margin: 10px 0; 
+            padding: 12px 16px; 
+            border-radius: 16px; 
+            line-height: 1.4;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+        }}
+        
+        .msg:hover {{
+            transform: translateY(-1px);
+        }}
+        
+        .msg-user {{
+            background: {StyleManager.COLORS['primary_gradient']}; 
+            color: white;
+            border: none;
+            margin-left: 20px;
+            border-bottom-right-radius: 6px;
+        }}
+        
+        .msg-assist {{
+            background: rgba(255, 255, 255, 0.08); 
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: inherit;
+            margin-right: 20px;
+            border-bottom-left-radius: 6px;
+            backdrop-filter: blur(8px);
+        }}
+        
+        .msg-role {{
+            font-size: 0.625rem; 
+            opacity: 0.7; 
+            margin-bottom: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }}
+        
+        /* Sidebar scrollbar */
+        .msg-wrap::-webkit-scrollbar {{
+            width: 6px;
+        }}
+        
+        .msg-wrap::-webkit-scrollbar-track {{
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+        }}
+        
+        .msg-wrap::-webkit-scrollbar-thumb {{
+            background: {StyleManager.COLORS['primary_gradient']};
+            border-radius: 3px;
+        }}
+        
+        .msg-wrap::-webkit-scrollbar-thumb:hover {{
+            background: linear-gradient(135deg, {StyleManager.COLORS['primary_light']} 0%, {StyleManager.COLORS['primary_dark']} 100%);
+        }}
+        </style>
+        """
+    
+    @staticmethod
+    def get_course_card_styles():
+        """Get CSS styles for course catalog cards
+        
+        Returns:
+            str: CSS for course cards, buttons, badges, and animations
+        """
+        return """
+        <style>
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        .course-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+            animation: fadeInUp 0.5s ease-out;
+            transition: all 0.3s ease;
+        }
+        
+        .course-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        
+        .course-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        
+        .course-header h3 {
+            font-size: 1.1rem;
+            margin-bottom: 6px;
+            color: #e0e7ff;
+        }
+        
+        .course-title {
+            color: #E6EAF3;
+            font-size: 18px;
+            font-weight: 800;
+            margin: 0;
+        }
+        
+        .provider {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 10px;
+        }
+        
+        .summary {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 15px;
+            line-height: 1.55;
+        }
+        
+        .course-btn {
+            display: inline-block;
+            padding: 6px 12px;
+            font-size: 0.85rem;
+            color: #a78bfa;
+            border: 1px solid rgba(167,139,250,0.3);
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 700;
+        }
+        
+        .course-btn:hover {
+            background: linear-gradient(90deg, #7c3aed, #2dd4bf);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 8px 18px rgba(99,102,241,0.2);
+        }
+        
+        .badge {
+            background: linear-gradient(90deg, #7c3aed, #2dd4bf);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            margin-right: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 800;
+        }
+        </style>
+        """
+    
+    @staticmethod
     def get_chat_styles():
         """Get professional CSS styles for enhanced chat interface"""
         return f"""
