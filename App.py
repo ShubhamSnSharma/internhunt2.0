@@ -25,6 +25,10 @@ from resume_parser import ResumeParser
 from styles import StyleManager
 from utils import AnalyticsUtils
 from chat_service import chat_gemini, build_resume_context, check_gemini_health, get_suggested_questions
+from markdown_it import MarkdownIt
+
+# Initialize Markdown parser
+md_parser = MarkdownIt()
 from streamlit.components.v1 import html as st_html  # legacy; floating chat removed
 from job_scrapers import scrape_all, scrape_internshala, scrape_internshala_by_keywords
 from Courses import (
@@ -366,157 +370,8 @@ def initialize_app():
         initial_sidebar_state="expanded",
     )
     
-    # Apply custom CSS for dark theme
-    st.markdown("""
-    <style>
-        :root {
-            --primary: #6366F1;
-            --primary-light: #818CF8;
-            --primary-dark: #4F46E5;
-            --secondary: #8B5CF6;
-            --accent: #10B981;
-            --dark-bg: #0A0E27;
-            --dark-surface: #141A35;
-            --dark-card: #1A1F3A;
-            --dark-border: #2D3748;
-            --text-primary: #F8FAFC;
-            --text-secondary: #9CA3AF;
-            --gradient-primary: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
-            --gradient-secondary: linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%);
-            --glow-primary: 0 0 20px rgba(99, 102, 241, 0.3);
-            --glow-secondary: 0 0 30px rgba(139, 92, 246, 0.4);
-        }
-        
-        /* Base styles with animations */
-        .stApp {
-            background: linear-gradient(135deg, #0A0E27 0%, #0F1532 50%, #141A35 100%);
-            color: var(--text-primary);
-            background-attachment: fixed;
-        }
-        
-        /* Sidebar */
-        .css-1d391kg, .e1fqkh3o3 {
-            background: linear-gradient(180deg, #141A35 0%, #1A1F3A 100%) !important;
-            border-right: 1px solid rgba(99, 102, 241, 0.1) !important;
-        }
-        
-        /* File uploader */
-        .stFileUploader > div > div > div > button {
-            background: var(--primary);
-            color: white !important;
-            border: none;
-            border-radius: 8px;
-            padding: 0.5rem 1rem;
-            transition: all 0.2s ease;
-        }
-        
-        .stFileUploader > div > div > div > button:hover {
-            background: var(--primary-light);
-            transform: translateY(-1px);
-        }
-        
-        /* File uploader text */
-        .stFileUploader > div > div > div > div > div > div {
-            color: #E2E8F0 !important;  /* Lighter text color for better visibility */
-            background-color: #1E293B;   /* Dark background for the text area */
-            padding: 8px 12px;          /* Add some padding around the text */
-            border-radius: 4px;          /* Rounded corners */
-            border: 1px solid #475569;   /* Subtle border */
-            margin-top: 4px;            /* Add some space above the text */
-        }
-        
-        .stFileUploader > div > div > div > div > div > div::before {
-            color: #E2E8F0 !important;  /* Lighter color for the icon */
-            margin-right: 8px;          /* Add space between icon and text */
-        }
-        
-        .stFileUploader > div > div > div > div > div > div::after {
-            color: #E2E8F0 !important;  /* Lighter color for any after content */
-        }
-        
-        /* Make the file name more visible */
-        .stFileUploader > div > div > div > div > div > div > span {
-            color: #E2E8F0 !important;
-            font-weight: 500;           /* Slightly bolder text */
-        }
-        
-        /* Buttons - Professional Styling */
-        .stButton > button {
-            background: var(--gradient-primary);
-            color: white;
-            border: 2px solid transparent;
-            border-radius: 10px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            font-weight: 600;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .stButton > button::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-        
-        .stButton > button:hover {
-            background: var(--gradient-secondary);
-            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4), var(--glow-secondary);
-            transform: translateY(-2px);
-        }
-        
-        .stButton > button:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-        
-        .stButton > button:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2);
-        }
-        
-        /* Input fields - Enhanced */
-        .stTextInput > div > div > input,
-        .stTextArea > div > div > textarea {
-            background-color: rgba(26, 31, 58, 0.8);
-            color: var(--text-primary);
-            border: 2px solid rgba(99, 102, 241, 0.2);
-            border-radius: 10px;
-            transition: all 0.3s ease;
-            padding: 12px 16px !important;
-            font-size: 14px;
-        }
-        
-        .stTextInput > div > div > input:focus,
-        .stTextArea > div > div > textarea:focus {
-            border-color: #6366F1;
-            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3), inset 0 0 10px rgba(99, 102, 241, 0.1);
-            background-color: rgba(26, 31, 58, 1);
-        }
-        
-        /* Select boxes - Enhanced */
-        .stSelectbox > div > div > div {
-            background-color: rgba(26, 31, 58, 0.8);
-            color: var(--text-primary);
-            border: 2px solid rgba(99, 102, 241, 0.2);
-            border-radius: 10px;
-            transition: all 0.3s ease;
-        }
-        
-        .stSelectbox > div > div > div:hover {
-            border-color: #6366F1;
-            background-color: rgba(26, 31, 58, 1);
-            box-shadow: 0 0 15px rgba(99, 102, 241, 0.2);
-        }
-    </style>
-    """, unsafe_allow_html=True)
+    # Apply Streamlit component overrides for dark theme
+    st.markdown(StyleManager.get_streamlit_component_overrides(), unsafe_allow_html=True)
     
     # Validate configuration
     config_status = Config.validate_config()
@@ -549,107 +404,9 @@ def initialize_app():
     # Apply styles
     StyleManager.apply_global_styles()
     StyleManager.apply_theme_styles(st.session_state.theme_mode)
-    # Professional sidebar chat styles
-    st.markdown(f"""
-        <style>
-        /* Professional Sidebar Styles */
-        .sb-chat-title {{
-            font-weight: 700; 
-            font-size: 1.125rem; 
-            margin-bottom: 12px;
-            color: inherit;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }}
-        
-        .sb-chip {{
-            display: inline-block; 
-            padding: 8px 12px; 
-            border-radius: 20px; 
-            font-size: 0.75rem; 
-            font-weight: 600;
-            margin-right: 8px; 
-            margin-bottom: 6px;
-            background: {StyleManager.COLORS['primary_gradient']};
-            color: white;
-            border: none;
-            transition: all 0.2s ease;
-        }}
-        
-        .sb-chip:hover {{
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(79, 70, 229, 0.3);
-        }}
-        
-        .msg-wrap {{
-            max-height: 60vh; 
-            overflow-y: auto; 
-            padding-right: 6px;
-            margin: 16px 0;
-        }}
-        
-        .msg {{
-            margin: 10px 0; 
-            padding: 12px 16px; 
-            border-radius: 16px; 
-            line-height: 1.4;
-            font-size: 0.875rem;
-            transition: all 0.2s ease;
-        }}
-        
-        .msg:hover {{
-            transform: translateY(-1px);
-        }}
-        
-        .msg-user {{
-            background: {StyleManager.COLORS['primary_gradient']}; 
-            color: white;
-            border: none;
-            margin-left: 20px;
-            border-bottom-right-radius: 6px;
-        }}
-        
-        .msg-assist {{
-            background: rgba(255, 255, 255, 0.08); 
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            color: inherit;
-            margin-right: 20px;
-            border-bottom-left-radius: 6px;
-            backdrop-filter: blur(8px);
-        }}
-        
-        .msg-role {{
-            font-size: 0.625rem; 
-            opacity: 0.7; 
-            margin-bottom: 4px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }}
-        
-        /* Sidebar scrollbar */
-        .msg-wrap::-webkit-scrollbar {{
-            width: 6px;
-        }}
-        
-        .msg-wrap::-webkit-scrollbar-track {{
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 3px;
-        }}
-        
-        .msg-wrap::-webkit-scrollbar-thumb {{
-            background: {StyleManager.COLORS['primary_gradient']};
-            border-radius: 3px;
-        }}
-        
-        .msg-wrap::-webkit-scrollbar-thumb:hover {{
-            background: linear-gradient(135deg, {StyleManager.COLORS['primary_light']} 0%, {StyleManager.COLORS['primary_dark']} 100%);
-        }}
-        </style>
-        """,
-        unsafe_allow_html=True,
-    )
+    
+    # Apply sidebar chat styles
+    st.markdown(StyleManager.get_sidebar_chat_styles(), unsafe_allow_html=True)
 
 @st.cache_resource(show_spinner=False)
 def get_resume_parser():
@@ -683,259 +440,11 @@ def display_header():
     # Load font inline
     font_b64 = _load_nevera_font()
     
-    # Ultra-professional header with modern design  
-    st.markdown(f"""
-    <style>
-    /* ---------------- CUSTOM FONT ---------------- */
-    @font-face {{
-        font-family: 'Nevera';
-        src: url('data:application/x-font-opentype;base64,{font_b64}') format('opentype'),
-             url('data:font/otf;base64,{font_b64}') format('opentype');
-        font-weight: 400;
-        font-style: normal;
-        font-display: swap;
-    }}
+    # Display hero section with custom font
+    st.markdown(StyleManager.get_hero_section(font_b64), unsafe_allow_html=True)
     
-    /* ---------------- HERO SECTION ---------------- */
-    .hero-section {{
-        position: relative;
-        background: radial-gradient(120% 160% at 50% 10%, #0e132a 20%, #0b1028 100%);
-        padding: 100px 20px 120px;
-        text-align: center;
-        border-radius: 20px;
-        overflow: hidden;
-        box-shadow: 0 8px 40px rgba(0,0,0,0.25);
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }}
-
-    .hero-section:hover {{
-        transform: scale(1.005);
-        box-shadow: 0 12px 45px rgba(0,0,0,0.3);
-    }}
-
-    /* Subtle background animation with moving gradient */
-    .hero-section::before {{
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(120deg, rgba(124,58,237,0.1), rgba(45,212,191,0.1), rgba(124,58,237,0.1), rgba(45,212,191,0.1));
-        background-size: 200% 200%;
-        animation: moveGradient 10s ease-in-out infinite alternate;
-        z-index: 0;
-    }}
-
-    @keyframes moveGradient {{
-        0%% {{ background-position: 0% 50%; }}
-        100%% {{ background-position: 100% 50%; }}
-    }}
-
-    /* Glow halo */
-    .hero-section::after {{
-        content: "";
-        position: absolute;
-        top: -150px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 1000px;
-        height: 1000px;
-        background: radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.1), rgba(99, 102, 241, 0.05) 70%, transparent 100%);
-        filter: blur(120px);
-        z-index: 0;
-        animation: pulseGlow 8s ease-in-out infinite alternate;
-    }}
-
-    @keyframes pulseGlow {{
-        0%% {{ opacity: 0.8; transform: translateX(-50%) scale(1); }}
-        100%% {{ opacity: 1; transform: translateX(-50%) scale(1.08); }}
-    }}
-
-    /* ============ UNIFIED ANIMATIONS ============ */
-    /* Smooth fade-up animation with cubic-bezier easing */
-    @keyframes fadeUp {{
-        0%% {{ opacity: 0; transform: translateY(40px); }}
-        100%% {{ opacity: 1; transform: translateY(0); }}
-    }}
-
-    /* ---------------- TEXT STYLING ---------------- */
-    .hero-badge {{
-        display: inline-block;
-        background: rgba(99,102,241,0.15);
-        border: 1px solid rgba(99,102,241,0.3);
-        box-shadow: inset 0 0 10px rgba(255,255,255,0.05);
-        backdrop-filter: blur(15px);
-        color: #a5b4fc;
-        padding: 8px 20px;
-        border-radius: 50px;
-        font-family: 'Inter', sans-serif;
-        font-size: 0.9rem;
-        font-weight: 500;
-        margin-bottom: 28px;
-        letter-spacing: 0.5px;
-        text-shadow: 0 0 10px rgba(165,180,252,0.3);
-        animation: fadeUp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        z-index: 2;
-    }}
-    
-    .hero-branding {{
-        font-family: 'Nevera', 'Helvetica Neue', Arial, sans-serif !important;
-        font-size: 5.5rem;
-        font-weight: 400;
-        color: #fff;
-        margin-bottom: 25px;
-        margin-top: 20px;
-        letter-spacing: 0.18em;
-        animation: fadeUp 1s cubic-bezier(0.4, 0, 0.2, 1), gradientFlow 6s ease-in-out infinite alternate;
-        position: relative;
-        z-index: 2;
-        text-transform: uppercase;
-        font-feature-settings: 'kern' 1;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        background: linear-gradient(100deg, #8b5cf6, #2dd4bf, #38bdf8, #8b5cf6);
-        background-size: 200% 200%;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-    }}
-
-    @keyframes gradientFlow {{
-        0%% {{ background-position: 0% 50%; }}
-        100%% {{ background-position: 100% 50%; }}
-    }}
-
-    .hero-title {{
-        font-family: 'Inter', sans-serif;
-        font-size: 2.8rem;
-        font-weight: 700;
-        color: #f1f5f9;
-        margin-bottom: 20px;
-        line-height: 1.2;
-        letter-spacing: -0.02em;
-        animation: fadeUp 1.1s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        z-index: 2;
-    }}
-
-    .hero-title span {{
-        color: #2cb67d;
-        background: linear-gradient(135deg, #7f5af0, #2cb67d);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-    }}
-
-    .hero-desc {{
-        font-family: 'Inter', sans-serif;
-        font-size: 1.1rem;
-        font-weight: 400;
-        color: #94a3b8;
-        max-width: 700px;
-        margin: 0 auto 30px;
-        line-height: 1.7;
-        letter-spacing: 0.01em;
-        padding: 0 10px;
-        text-align: center;
-        position: relative;
-        z-index: 2;
-    }}
-
-    /* ---------------- CTA BUTTON ---------------- */
-    .hero-cta {{
-        text-align: center;
-        margin-top: 32px;
-    }}
-
-    .cta-button {{
-        display: inline-block;
-        margin-top: 32px;
-        padding: 14px 36px;
-        background: linear-gradient(135deg, #6366f1, #14b8a6);
-        border: none;
-        border-radius: 50px;
-        color: white;
-        font-family: 'Inter', sans-serif;
-        font-weight: 600;
-        text-decoration: none;
-        box-shadow: 0 8px 20px rgba(99,102,241,0.3);
-        backdrop-filter: blur(10px);
-        transition: all 0.3s ease-in-out;
-        cursor: pointer;
-        font-size: 1.05rem;
-        letter-spacing: 0.02em;
-        animation: fadeUp 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        overflow: hidden;
-    }}
-    
-    .cta-button::before {{
-        content: "";
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-        transition: left 0.5s ease;
-    }}
-    
-    .cta-button:hover::before {{
-        left: 100%;
-    }}
-
-    .cta-button:hover {{
-        transform: translateY(-2px);
-        box-shadow: 0 12px 30px rgba(99,102,241,0.5);
-    }}
-    
-    .cta-button:active {{
-        transform: translateY(0px);
-        box-shadow: 0 4px 15px rgba(99,102,241,0.4);
-    }}
-
-    /* Scroll target for upload section */
-    #upload-section {{
-        scroll-margin-top: 20px;
-    }}
-
-    /* ---------------- RESPONSIVE DESIGN ---------------- */
-    @media (max-width: 1024px) {{
-        .hero-section {{ padding: 80px 20px 100px; }}
-        .hero-branding {{ font-size: 4rem; }}
-        .hero-title {{ font-size: 2.1rem; line-height: 1.2; }}
-        .hero-desc {{ font-size: 1rem; max-width: 600px; line-height: 1.6; }}
-        .hero-badge {{ font-size: 0.85rem; }}
-        .cta-button {{ font-size: 1rem; padding: 12px 32px; }}
-    }}
-
-    @media (max-width: 768px) {{
-        .hero-section {{ padding: 60px 16px 80px; }}
-        .hero-branding {{ font-size: 3rem; letter-spacing: 0.12em; }}
-        .hero-title {{ font-size: 1.7rem; line-height: 1.25; }}
-        .hero-desc {{ font-size: 0.95rem; max-width: 100%; padding: 0 10px; line-height: 1.6; }}
-        .hero-badge {{ font-size: 0.8rem; padding: 6px 16px; }}
-        .cta-button {{ font-size: 0.95rem; padding: 12px 28px; margin-top: 24px; }}
-    }}
-
-    @media (max-width: 480px) {{
-        .hero-section {{ padding: 50px 12px 70px; }}
-        .hero-branding {{ font-size: 2.2rem; }}
-        .hero-title {{ font-size: 1.6rem; line-height: 1.3; }}
-        .hero-desc {{ font-size: 0.9rem; line-height: 1.6; }}
-        .hero-badge {{ font-size: 0.75rem; padding: 5px 14px; }}
-    }}
-    </style>
-
-    <!-- HERO SECTION -->
-    <div class="hero-section">
-        <div class="hero-badge">⚡ AI-Powered Internship Matching</div>
-        <div class="hero-branding">INTERNHUNT</div>
-        <h1 class="hero-title">Find Internships That <span>Fit You</span></h1>
-        <div class="hero-cta">
-            <a href="#upload-section" class="cta-button">Upload Resume</a>
-        </div>
-    </div>
-""", unsafe_allow_html=True)
+    # Apply scroll indicator animation styles
+    st.markdown(StyleManager.get_scroll_indicator_styles(), unsafe_allow_html=True)
 
 
 def get_table_download_link(df, filename, text):
@@ -1717,87 +1226,8 @@ def display_job_card(job, source):
 
 def course_recommender(course_list):
     """Display course recommendations - Catalog-style cards"""
-    # Styles for course catalog cards
-    st.markdown("""
-        <style>
-        @keyframes fadeInUp {
-            0% { opacity: 0; transform: translateY(20px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-        .course-card {
-            background: linear-gradient(145deg, #0b1221, #151c30);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 16px;
-            padding: 18px 18px 16px 18px;
-            margin: 10px 0 18px;
-            box-shadow: 0 10px 24px rgba(0,0,0,0.25);
-            animation: fadeInUp .5s ease-out;
-        }
-        .course-header { display:flex; align-items:center; justify-content:space-between; gap:10px; }
-        .course-title { color:#E6EAF3; font-size:18px; font-weight:800; margin:0; }
-        .badge { display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:999px; font-size:12px; font-weight:800; color:#fff; }
-        .provider { color:#A6ADBB; font-size:13px; margin:8px 0 6px; font-weight:600; }
-        .summary { color:#CBD5E1; font-size:13px; line-height:1.55; margin:0 0 10px; }
-        .course-btn { display:inline-block; padding:10px 14px; border-radius:10px; color:#E0E7FF; font-weight:700; text-decoration:none; border:1px solid rgba(99,102,241,.35); background:linear-gradient(135deg, rgba(99,102,241,.15), rgba(139,92,246,.10)); }
-        .course-btn:hover { filter:brightness(1.08); box-shadow:0 8px 18px rgba(99,102,241,.2); }
-        </style>
-    """, unsafe_allow_html=True)
-
-    # Additional override styles for course cards (as requested)
-    st.markdown("""
-    <style>
-    .course-card {
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 255, 255, 0.07);
-        border-radius: 14px;
-        padding: 20px;
-        margin-bottom: 20px;
-        transition: all 0.3s ease;
-    }
-    .course-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-    }
-    .course-header h3 {
-        font-size: 1.1rem;
-        margin-bottom: 6px;
-        color: #e0e7ff;
-    }
-    .provider {
-        font-size: 0.9rem;
-        color: rgba(255,255,255,0.6);
-        margin-bottom: 10px;
-    }
-    .summary {
-        font-size: 0.9rem;
-        color: rgba(255,255,255,0.7);
-        margin-bottom: 15px;
-    }
-    .course-btn {
-        display: inline-block;
-        padding: 6px 12px;
-        font-size: 0.85rem;
-        color: #a78bfa;
-        border: 1px solid rgba(167,139,250,0.3);
-        border-radius: 8px;
-        text-decoration: none;
-        transition: all 0.3s ease;
-    }
-    .course-btn:hover {
-        background: linear-gradient(90deg, #7c3aed, #2dd4bf);
-        color: white;
-        border-color: transparent;
-    }
-    .badge {
-        background: linear-gradient(90deg, #7c3aed, #2dd4bf);
-        color: white;
-        padding: 3px 8px;
-        border-radius: 6px;
-        font-size: 0.75rem;
-        margin-right: 8px;
-    }
-    </style>
-    """, unsafe_allow_html=True)
+    # Apply course card styles
+    st.markdown(StyleManager.get_course_card_styles(), unsafe_allow_html=True)
 
     # Header (centered)
     st.markdown("""
@@ -2629,12 +2059,120 @@ def main():
             
             up_left, up_right = st.columns([3, 1])
             with up_left:
-                st.markdown('<div id="upload-section" class="card upload-card fade-in">\
-                    <div class="title">Upload Resume</div>\
-                    <div class="subtitle">PDF only. Keep it under 10MB.</div>', unsafe_allow_html=True)
+                # Custom CSS for the upload button
+                st.markdown("""
+                <style>
+                    /* Target the file uploader container */
+                    [data-testid='stFileUploader'] {
+                        width: 100%;
+                    }
+                    
+                    /* Hide the default dropzone text and icon */
+                    [data-testid='stFileUploader'] section > div:first-child {
+                        display: none;
+                    }
+                    
+                    /* Remove padding/border from the dropzone container */
+                    [data-testid='stFileUploader'] section {
+                        padding: 0;
+                        background-color: transparent;
+                        border: none;
+                        min-height: 0;
+                    }
+                    
+                    /* Style the Browse button */
+                    [data-testid='stFileUploader'] button {
+                        background-color: #6366F1 !important;
+                        color: white !important;
+                        border: none !important;
+                        border-radius: 4px !important;
+                        padding: 10px 24px !important;
+                        font-weight: 600 !important;
+                        font-size: 14px !important;
+                        line-height: 1.5 !important;
+                        text-transform: none !important;
+                        width: auto !important;
+                        box-shadow: 0 4px 6px rgba(99, 102, 241, 0.2) !important;
+                        transition: all 0.2s ease !important;
+                        margin-top: 0 !important;
+                    }
+                    
+                    [data-testid='stFileUploader'] button:hover {
+                        background-color: #4F46E5 !important;
+                        transform: translateY(-1px);
+                        box-shadow: 0 6px 12px rgba(99, 102, 241, 0.3) !important;
+                    }
+                    
+                    /* Add the "+ Upload Resume" text */
+                    [data-testid='stFileUploader'] button::after {
+                        content: " Resume";
+                        margin-left: 4px;
+                    }
+                    
+                    /* Card styling */
+                    .custom-upload-card {
+                        background: #1A1F3A;
+                        border-radius: 12px;
+                        padding: 24px;
+                        border: 1px solid rgba(99, 102, 241, 0.2);
+                        display: flex;
+                        flex-direction: column;
+                        gap: 16px;
+                        position: relative;
+                        overflow: hidden;
+                    }
+                    
+                    .custom-upload-card::before {
+                        content: "";
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 4px;
+                        height: 100%;
+                        background: #6366F1;
+                    }
+                    
+                    .upload-text {
+                        font-size: 18px;
+                        font-weight: 600;
+                        color: #F8FAFC;
+                        margin-bottom: 4px;
+                    }
+                    
+                    .upload-subtext {
+                        font-size: 13px;
+                        color: #94A3B8;
+                        display: flex;
+                        align-items: center;
+                        gap: 6px;
+                    }
+                    
+                    .info-icon {
+                        color: #94A3B8;
+                        font-size: 16px;
+                        float: right;
+                    }
+                </style>
+                
+                <div class="custom-upload-card">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div>
+                            <div class="upload-text">Get a head start by uploading your resume</div>
+                            <div class="upload-subtext">
+                                <span>Supported formats: PDF, DOCX</span>
+                            </div>
+                        </div>
+                        <div class="info-icon">ⓘ</div>
+                    </div>
+                    <div style="margin-top: 8px;">
+                """, unsafe_allow_html=True)
+                
                 pdf_file = st.file_uploader("Upload Resume", type=["pdf"], label_visibility="collapsed", key="resume_pdf")
-                st.markdown('<hr class="soft-divider"/>', unsafe_allow_html=True)
-                st.markdown('</div>', unsafe_allow_html=True)
+                
+                st.markdown("""
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
             with up_right:
                 # Show file details card when available
                 if 'resume_pdf' in st.session_state and st.session_state['resume_pdf'] is not None:
@@ -3963,9 +3501,15 @@ def main():
                 max-width: 80%;
                 word-wrap: break-word;
                 font-size: 0.95rem;
-                line-height: 1.5;
+                line-height: 1.6;
                 animation: fadeIn 0.3s ease-in-out;
             }
+            .message-bubble p { margin: 0 0 8px 0; }
+            .message-bubble p:last-child { margin-bottom: 0; }
+            .message-bubble ul, .message-bubble ol { margin: 0 0 8px 0; padding-left: 20px; }
+            .message-bubble li { margin-bottom: 4px; }
+            .message-bubble strong { font-weight: 600; color: #fff; }
+            .message-bubble em { font-style: italic; opacity: 0.9; }
             .user {
                 background: linear-gradient(135deg, #6366f1, #0ea5e9);
                 color: #fff;
@@ -4084,27 +3628,35 @@ def main():
             # CHAT HISTORY
             st.markdown('<div class="chat-scroll">', unsafe_allow_html=True)
             import html
+            
+            # Create a container for messages to allow dynamic updates
+            # Height parameter makes it scrollable (Streamlit 1.30+)
+            chat_container = st.container(height=500)
+            
             if 'chat_messages' not in st.session_state:
                 st.session_state['chat_messages'] = []
-            for m in st.session_state['chat_messages'][-50:]:
-                role = m.get('role', 'user')
-                content = html.escape(m.get('content', '') or '').replace('\n', '<br>')
-                timestamp = m.get('timestamp', '')
-                if role == 'user':
-                    st.markdown(f"""
-                        <div class="message-container message-user">
-                            <div class="message-bubble user">{content}</div>
-                            <div class="message-time">{timestamp}</div>
-                        </div>
-                    """, unsafe_allow_html=True)
-                else:
-                    st.markdown(f"""
-                        <div class="message-container message-assistant">
-                            <div class="message-bubble assistant">{content}</div>
-                            <div class="message-time">{timestamp}</div>
-                        </div>
-                    """, unsafe_allow_html=True)
-            st.markdown('</div>', unsafe_allow_html=True)
+            
+            with chat_container:
+                for m in st.session_state['chat_messages'][-50:]:
+                    role = m.get('role', 'user')
+                    # Use Markdown parser for rich text
+                    content = md_parser.render(m.get('content', '') or '')
+                    timestamp = m.get('timestamp', '')
+                    if role == 'user':
+                        st.markdown(f"""
+                            <div class="message-container message-user">
+                                <div class="message-bubble user">{content}</div>
+                                <div class="message-time">{timestamp}</div>
+                            </div>
+                        """, unsafe_allow_html=True)
+                    else:
+                        st.markdown(f"""
+                            <div class="message-container message-assistant">
+                                <div class="message-bubble assistant">{content}</div>
+                                <div class="message-time">{timestamp}</div>
+                            </div>
+                        """, unsafe_allow_html=True)
+                st.markdown('</div>', unsafe_allow_html=True)
 
             # === CHAT INPUT ===
             left_pad, mid_col, right_pad = st.columns([1, 8, 1])
@@ -4127,57 +3679,88 @@ def main():
             user_text = (user_text_value or "").strip() if send else None
             if user_text:
                 timestamp = datetime.datetime.now().strftime("%H:%M")
+                
+                # Add user message to state
                 st.session_state['chat_messages'].append({
                     "role": "user",
                     "content": user_text,
                     "timestamp": timestamp
                 })
-                # Typing animation
-                with st.spinner("🤖 Thinking..."):
-                    typing_placeholder = st.empty()
-                    typing_placeholder.markdown("""
-                        <div class="message-container message-assistant">
-                            <div class="message-bubble assistant typing-indicator">
-                                <span>🤖 Thinking</span>
-                                <div class="typing-dots">
-                                    <div class="typing-dot"></div>
-                                    <div class="typing-dot"></div>
-                                    <div class="typing-dot"></div>
-                                </div>
-                            </div>
+                
+                # Render user message immediately
+                with chat_container:
+                    user_html = md_parser.render(user_text)
+                    st.markdown(f"""
+                        <div class="message-container message-user">
+                            <div class="message-bubble user">{user_html}</div>
+                            <div class="message-time">{timestamp}</div>
                         </div>
                     """, unsafe_allow_html=True)
-                    context = st.session_state.get('resume_context') if st.session_state.get('chat_use_context', True) else None
-                    if chat_style == "Concise":
-                        sys = "Be brief and friendly. Give 2-3 quick tips in plain language."
-                    elif chat_style == "Detailed":
-                        sys = "Give helpful advice in a conversational tone. Include 3-4 specific recommendations."
-                    else:
-                        sys = "Answer in 2-3 natural sentences like you're helping a friend."
-                    try:
-                        from dotenv import load_dotenv
-                        load_dotenv(override=True)
-                        reply = chat_gemini(
-                            st.session_state['chat_messages'], 
-                            resume_context=context, 
-                            system_prompt=sys
-                        )
-                        typing_placeholder.empty()
-                        if reply:
+
+                # Typing animation
+                with chat_container:
+                    with st.spinner("🤖 Thinking..."):
+                        typing_placeholder = st.empty()
+                        typing_placeholder.markdown("""
+                            <div class="message-container message-assistant">
+                                <div class="message-bubble assistant typing-indicator">
+                                    <span>🤖 Thinking</span>
+                                    <div class="typing-dots">
+                                        <div class="typing-dot"></div>
+                                        <div class="typing-dot"></div>
+                                        <div class="typing-dot"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        """, unsafe_allow_html=True)
+                        
+                        context = st.session_state.get('resume_context') if st.session_state.get('chat_use_context', True) else None
+                        if chat_style == "Concise":
+                            sys = "Be brief and friendly. Give 2-3 quick tips in plain language."
+                        elif chat_style == "Detailed":
+                            sys = "Give helpful advice in a conversational tone. Include 3-4 specific recommendations."
+                        else:
+                            sys = "Answer in 2-3 natural sentences like you're helping a friend."
+                        
+                        try:
+                            from dotenv import load_dotenv
+                            load_dotenv(override=True)
+                            reply = chat_gemini(
+                                st.session_state['chat_messages'], 
+                                resume_context=context, 
+                                system_prompt=sys
+                            )
+                            typing_placeholder.empty()
+                            
+                            if reply:
+                                st.session_state['chat_messages'].append({
+                                    "role": "assistant",
+                                    "content": reply,
+                                    "timestamp": datetime.datetime.now().strftime("%H:%M")
+                                })
+                                # Render assistant response immediately
+                                reply_html = md_parser.render(reply)
+                                st.markdown(f"""
+                                    <div class="message-container message-assistant">
+                                        <div class="message-bubble assistant">{reply_html}</div>
+                                        <div class="message-time">{datetime.datetime.now().strftime("%H:%M")}</div>
+                                    </div>
+                                """, unsafe_allow_html=True)
+                                
+                        except Exception as e:
+                            typing_placeholder.empty()
+                            error_msg = f"⚠️ {str(e)}"
                             st.session_state['chat_messages'].append({
                                 "role": "assistant",
-                                "content": reply,
+                                "content": error_msg,
                                 "timestamp": datetime.datetime.now().strftime("%H:%M")
                             })
-                        st.rerun()
-                    except Exception as e:
-                        typing_placeholder.empty()
-                        st.session_state['chat_messages'].append({
-                            "role": "assistant",
-                            "content": f"⚠️ {str(e)}",
-                            "timestamp": datetime.datetime.now().strftime("%H:%M")
-                        })
-                        st.rerun()
+                            st.markdown(f"""
+                                <div class="message-container message-assistant">
+                                    <div class="message-bubble assistant">{error_msg}</div>
+                                    <div class="message-time">{datetime.datetime.now().strftime("%H:%M")}</div>
+                                </div>
+                            """, unsafe_allow_html=True)
 
             # === FOOTER ===
             st.markdown("""
