@@ -67,42 +67,99 @@
 
 ## ✨ Features
 
-### 🎯 **Smart Resume Analysis**
-- 📄 **Multi-format Support** - Upload PDF or DOCX resumes
-- 🤖 **ML Classification** - Automatic role categorization using scikit-learn
-- 📊 **Skill Extraction** - NLP-powered skill identification
-- 💡 **Career Insights** - Get personalized recommendations
+### 📋 **Complete Resume Analysis Pipeline**
 
-### 🤝 **AI Career Assistant**
+#### **1. Resume Upload**
+- 📄 **Multi-format Support** - Upload PDF or DOCX resumes
+- 🎯 **Drag & Drop Interface** - Easy file upload (50MB limit)
+- ✅ **Instant Validation** - Real-time upload status
+- 📊 **Basic Info Extraction** - Name, email, phone, LinkedIn
+
+#### **2. Skills Extracted**
+- 🔍 **NLP-Powered Detection** - Identifies 100+ technical skills
+- 🏷️ **Smart Categorization** - Groups skills by domain
+- 📈 **Skill Proficiency** - Detects skill levels from context
+- 🎨 **Visual Display** - Clean, organized skill badges
+
+#### **3. AI-Detected Profile**
+- 🤖 **ML Classification** - 99.5% accurate role prediction using Logistic Regression
+- 🎯 **Top 3 Predictions** - Shows alternative roles with confidence scores
+- 📊 **Probability Analysis** - Displays prediction confidence
+- 🔄 **25 Job Categories** - From Software Development to Engineering
+
+#### **4. ATS Performance Dashboard**
+- 📈 **ATS Score** - Resume compatibility with Applicant Tracking Systems
+- 🎯 **Keyword Analysis** - Identifies missing industry keywords
+- 📊 **Section Completeness** - Tracks resume sections (3/5, etc.)
+- 💡 **Optimization Tips** - Actionable suggestions to improve ATS score
+
+#### **5. Resume Analysis**
+- 📝 **Skills Count** - Total technical skills detected (e.g., 19 skills)
+- 📄 **Sections Count** - Resume structure analysis (e.g., 3/5 sections)
+- 📊 **Completeness Score** - Overall resume quality metric
+- 🎯 **Visual Progress** - Clean progress bars and metrics
+
+#### **6. Top Suggestions**
+- 💡 **AI-Powered Recommendations** - Personalized resume improvement tips
+- ✍️ **Template Suggestions** - Pre-built templates for missing sections
+- 🎯 **Priority Ranking** - Numbered suggestions by importance
+- 📝 **Quick Actions** - One-click template insertion
+
+**Example Suggestions:**
+1. Add detailed work experience with achievements
+2. Consider adding a professional summary
+3. Add a Work Experience section with achievements and dates
+4. Add a short Summary/Objective tailored to the target role
+
+#### **7. Role Alignment Analysis**
+- 🎯 **Target Role Matching** - Compares resume against specific job roles
+- 📊 **Alignment Score** - Percentage match with target position
+- 🔍 **Gap Analysis** - Identifies missing skills/experience
+- 💡 **Improvement Roadmap** - Steps to better align with role
+
+#### **8. Job Recommendations**
+- 🌐 **Multi-Source Aggregation** - Jobs from Jooble + Internshala
+- 🎯 **Personalized Matching** - Based on detected skills and role
+- 📍 **Location-based** - Filter by city and remote options
+- 🔄 **Real-time Updates** - Fresh opportunities daily
+- 📊 **Detailed Listings** - Company, location, salary, requirements
+
+**Sources:**
+- **Jooble API** - Global internship opportunities
+- **Internshala Scraper** - India-focused internships
+
+#### **9. Recommended Courses**
+- 🎓 **Skill-based Suggestions** - Courses aligned with career goals
+- 🏆 **Top Platforms** - Coursera, Udemy, edX, and more
+- 📈 **Learning Paths** - Structured roadmaps for skill development
+- ⭐ **Quality Curated** - Only the best courses recommended
+- 🎯 **Role-specific** - Tailored to your detected profile
+
+#### **10. InternHunt Assistant (AI Chatbot)**
 - 💬 **Conversational AI** - Powered by Google Gemini
 - 🎓 **Career Guidance** - Expert advice on internships and career paths
 - 📚 **Context-Aware** - Remembers your resume and preferences
 - ⚡ **Real-time Responses** - Fast and accurate answers
+- 🤝 **Interview Prep** - Tips, common questions, best practices
 
-### 🔍 **Intelligent Job Matching**
-- 🌐 **Multi-source Scraping** - Internshala, LinkedIn, and more
-- 🎯 **Personalized Results** - Based on your skills and interests
-- 📍 **Location-based** - Filter by city and remote options
-- 🔄 **Real-time Updates** - Fresh opportunities daily
+---
 
-### 📚 **Course Recommendations**
-- 🎓 **Skill-based Suggestions** - Courses aligned with your career goals
-- 🏆 **Top Platforms** - Coursera, Udemy, edX, and more
-- 📈 **Learning Paths** - Structured roadmaps for skill development
-- ⭐ **Quality Curated** - Only the best courses recommended
+### 🔐 **Admin Dashboard**
+- 👨‍💼 **User Management** - Track all uploaded resumes
+- 📊 **Analytics** - View platform statistics and insights
+- 💾 **Cloud Database** - Powered by Neon PostgreSQL
+- 🌐 **Web-based** - Access from anywhere
+- 🔄 **Real-time Sync** - Instant data updates
+- 📈 **Resume Database** - All uploaded resumes stored securely
+
+---
 
 ### 🎨 **Modern UI/UX**
 - 🌙 **Dark Theme** - Easy on the eyes
 - ✨ **Glassmorphism** - Modern design aesthetics
 - 📱 **Responsive** - Works on all devices
 - 🎭 **Smooth Animations** - Delightful user experience
-
-### 🔐 **Admin Dashboard**
-- 👨‍💼 **User Management** - Track and manage users
-- 📊 **Analytics** - View platform statistics
-- 💾 **Cloud Database** - Powered by Neon (PostgreSQL)
-- 🌐 **Web-based** - Access from anywhere
-- 🔄 **Real-time Sync** - Instant data updates
+- 🎯 **Intuitive Flow** - Seamless user journey from upload to job search
 
 ---
 
@@ -478,31 +535,98 @@ top_3_predictions = [
 
 ## 🎯 Usage Guide
 
+### **Complete User Journey**
 
-### 1️⃣ **Upload Your Resume**
-- Click on the file uploader
-- Select your PDF or DOCX resume
-- Wait for automatic analysis
+#### **Step 1: Upload Your Resume** 📄
+1. Visit [internhunt.streamlit.app](https://internhunt.streamlit.app)
+2. Drag and drop your resume or click "Browse files Resume"
+3. Supported formats: PDF, DOCX (max 50MB)
+4. Wait for upload confirmation ✅
 
-### 2️⃣ **Explore Recommendations**
-- View your classified role
-- Check extracted skills
-- Browse personalized job matches
+#### **Step 2: View Basic Info** 👤
+- **Name** extracted from resume
+- **Email** address detected
+- **Phone** number identified
+- **LinkedIn** profile link (if present)
 
-### 3️⃣ **Chat with AI Assistant**
-- Ask career-related questions
+#### **Step 3: Skills Extracted** 🔍
+- View all **technical skills** detected from your resume
+- Skills organized by category (Programming, Frameworks, Tools, etc.)
+- **19+ skills** typically identified
+- Clean visual display with skill badges
+
+#### **Step 4: AI-Detected Profile** 🤖
+- See your **predicted job role** (99.5% accuracy)
+- View **Top 3 role predictions** with confidence scores
+- Example: "Python Developer (85%), Data Scientist (10%), Web Developer (5%)"
+- Understand which category best fits your profile
+
+#### **Step 5: ATS Performance Dashboard** 📊
+- Check your **ATS compatibility score**
+- See **keyword analysis** and missing terms
+- View **section completeness** (e.g., 3/5 sections)
+- Get optimization tips to improve ATS score
+
+#### **Step 6: Resume Analysis** 📝
+- **Skills Count**: Total skills detected (e.g., 19 skills)
+- **Sections Count**: Resume structure (e.g., 3/5 sections)
+- **Completeness Score**: Overall quality metric
+- Visual progress bars for each metric
+
+#### **Step 7: Top Suggestions** 💡
+Review AI-powered recommendations:
+1. Add detailed work experience with achievements
+2. Consider adding a professional summary
+3. Add a Work Experience section with achievements and dates
+4. Add a short Summary/Objective tailored to the target role
+
+**Quick Actions:**
+- ✨ Add Work Experience Template
+- 📝 Add Summary/Objective Template
+
+#### **Step 8: Role Alignment Analysis** 🎯
+- See how your resume aligns with target roles
+- View **alignment percentage** for specific positions
+- Identify **skill gaps** and missing experience
+- Get roadmap to improve role fit
+
+#### **Step 9: Job Recommendations** 🌐
+Browse personalized internship opportunities:
+
+**From Jooble:**
+- Global internship listings
+- Filtered by your detected role
+- Location-based results
+
+**From Internshala:**
+- India-focused internships
+- Real-time scraping
+- Detailed company info, stipend, duration
+- Direct application links
+
+#### **Step 10: Recommended Courses** 🎓
+- View courses tailored to your profile
+- Platforms: Coursera, Udemy, edX, etc.
+- Organized by skill development path
+- Click to enroll directly
+
+#### **Bonus: InternHunt Assistant** 🤖
+- Open sidebar chat
+- Ask career questions
 - Get interview tips
 - Receive personalized advice
+- Powered by Google Gemini AI
 
-### 4️⃣ **Discover Courses**
-- Browse recommended courses
-- Filter by platform and topic
-- Start learning!
+---
 
-### 5️⃣ **Search for Internships**
-- Use filters (location, role, etc.)
-- View detailed job descriptions
-- Apply directly through links
+### **Admin Dashboard Access** 🔐
+*For administrators only*
+
+1. Access admin panel
+2. View all uploaded resumes
+3. Check user analytics
+4. Monitor platform statistics
+5. Manage resume database (Neon PostgreSQL)
 
 ---
 
@@ -544,7 +668,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 **Shubham Sharma**
 
 - GitHub: [@ShubhamSnSharma](https://github.com/ShubhamSnSharma)
-- LinkedIn: [Your LinkedIn](https://linkedin.com/in/yourprofile)
+- LinkedIn: [Your LinkedIn](https://linkedin.com/in/ShubhamSnSharma)
 - Email: your.email@example.com
 
 ---
