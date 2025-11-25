@@ -669,7 +669,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - GitHub: [@ShubhamSnSharma](https://github.com/ShubhamSnSharma)
 - LinkedIn: [Your LinkedIn](https://linkedin.com/in/ShubhamSnSharma)
-- Email: your.email@example.com
+- Email: shubhamsharma99918@gmail.com
 
 ---
 
