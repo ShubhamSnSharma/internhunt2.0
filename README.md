@@ -335,7 +335,51 @@ internhunt2/
 
 ---
 
+## 🤖 Machine Learning Model
+
+### Resume Classification Model
+
+InternHunt uses a **custom-trained ML model** to automatically categorize resumes into job roles.
+
+#### **Model Details:**
+- **Algorithm:** scikit-learn classifier (trained on resume dataset)
+- **File:** `resume_classifier_v2.pkl` (1.2 MB)
+- **Training Data:** `UpdatedResumeDataSet.csv` (3 MB, multiple resume samples)
+- **Purpose:** Automatic role categorization from resume text
+
+#### **How It Works:**
+1. **Resume Upload** → User uploads PDF/DOCX resume
+2. **Text Extraction** → PyPDF2/python-docx extracts text content
+3. **NLP Processing** → NLTK tokenizes and cleans the text
+4. **Feature Extraction** → Converts text to numerical features
+5. **Classification** → ML model predicts the best-fit job role
+6. **Results** → Returns role category with confidence score
+
+#### **Supported Job Categories:**
+The model can classify resumes into various tech roles including:
+- Software Development
+- Data Science
+- Web Development
+- Mobile Development
+- DevOps
+- And more...
+
+#### **Model Performance:**
+- Trained on diverse resume samples
+- Uses NLP techniques for text preprocessing
+- Optimized for accuracy and speed
+
+#### **Technologies Used:**
+- **scikit-learn** - ML framework
+- **NLTK** - Text preprocessing
+- **Pandas** - Data handling
+- **NumPy** - Numerical operations
+- **joblib** - Model serialization
+
+---
+
 ## 🎯 Usage Guide
+
 
 ### 1️⃣ **Upload Your Resume**
 - Click on the file uploader
