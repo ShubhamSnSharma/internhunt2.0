@@ -78,7 +78,7 @@ We may update this Privacy Policy periodically. Changes will be posted on this p
 ## Contact Us
 
 For privacy-related questions or requests:
-- **Email**: shubhamsnsharma@example.com (update with your actual email)
+- **Email**: shubhamsharma99918@gmail.com
 - **GitHub Issues**: [Report Privacy Concern](https://github.com/ShubhamSnSharma/internhunt2/issues/new)
 
 ## Open Source
