@@ -365,30 +365,87 @@ Full InternHunt experience!
 
 ```
 internhunt2/
-├── 📄 App.py                      # Main application entry point
-├── 🎨 styles.py                   # UI styling and themes
-├── 🤖 chat_service.py             # Gemini AI chatbot logic
-├── 📝 resume_parser.py            # Resume parsing & analysis
-├── ⚙️ config.py                   # Configuration management
-├── 🛠️ utils.py                    # Utility functions
-├── 💾 database.py                 # Database operations
-├── 🌐 api_services.py             # External API integrations
-├── 🔍 job_scrapers.py             # Job scraping modules
-├── ⚠️ error_handler.py            # Error handling
-├── 📚 Courses.py                  # Course recommendation logic
-├── 🤖 resume_classifier_v2.pkl    # Trained ML model
-├── 📊 UpdatedResumeDataSet.csv    # Training dataset
-├── 📋 requirements.txt            # Python dependencies
-├── 📖 README.md                   # This file
-├── 🔐 .env.example                # Environment variables template
-├── 🚫 .gitignore                  # Git ignore rules
-├── 📁 .streamlit/                 # Streamlit configuration
-│   ├── config.toml
-│   └── secrets.toml.example
-├── 🔤 nevera_font/                # Custom fonts
-├── 📂 Uploaded_Resumes/           # User uploaded resumes
-└── 📄 pages/                      # Additional Streamlit pages
+├── 📄 App.py                           # Main Streamlit application entry point
+├── 🎨 styles.py                        # Centralized UI styling and themes
+├── 🤖 chat_service.py                  # Gemini AI chatbot service
+├── 📝 resume_parser.py                 # Resume parsing & NLP analysis
+├── ⚙️ config.py                        # Configuration management
+├── 🛠️ utils.py                         # Utility functions
+├── 💾 database.py                      # Neon PostgreSQL database operations
+├── 🌐 api_services.py                  # External API integrations (Jooble)
+├── 🔍 job_scrapers.py                  # Job scraping (Internshala)
+├── ⚠️ error_handler.py                 # Error handling & logging
+├── 📚 Courses.py                       # Course recommendation engine
+│
+├── 🤖 resume_classifier_v2.pkl         # Trained ML model (1.2 MB)
+├── 📊 UpdatedResumeDataSet.csv         # Training dataset (962 samples)
+├── 📓 ResumeClassification_Model.ipynb # Model training notebook
+│
+├── 📋 requirements.txt                 # Python dependencies
+├── 📖 README.md                        # Project documentation
+├── 📜 LICENSE                          # MIT License
+├── 🔒 PRIVACY.md                       # Privacy policy
+├── 🔐 .env.example                     # Environment variables template
+├── 🚫 .gitignore                       # Git ignore rules
+│
+├── 📁 .streamlit/                      # Streamlit configuration
+│   ├── config.toml                     # App configuration
+│   └── secrets.toml.example            # Secrets template
+│
+├── 🔤 nevera_font/                     # Custom Nevera font files
+│   ├── Nevera-Bold.ttf
+│   ├── Nevera-Regular.ttf
+│   └── Nevera-Light.ttf
+│
+├── 📂 Uploaded_Resumes/                # User uploaded resume storage
+│   └── .gitkeep                        # Preserve directory in Git
+│
+├── � screenshots/                     # Application screenshots for README
+│   ├── landing-page.png                # Vercel landing page
+│   ├── resume-upload.png               # Resume upload interface
+│   ├── skills-extracted.png            # Skills detection display
+│   ├── ai-profile.png                  # ML role prediction
+│   ├── ats-dashboard.png               # ATS performance metrics
+│   ├── suggestions.png                 # AI improvement suggestions
+│   ├── chatbot.png                     # Gemini AI assistant
+│   ├── courses.png                     # Course recommendations
+│   ├── job-search.png                  # Job listings
+│   └── admin-dashboard.png             # Admin panel
+│
+└── 🐍 venv/                            # Virtual environment (not in Git)
 ```
+
+### **Key Files Explained:**
+
+**Core Application:**
+- `App.py` - Main Streamlit app with complete user flow (3814 lines)
+- `styles.py` - All CSS styling, glassmorphism, animations (70KB)
+- `chat_service.py` - Google Gemini integration for AI chatbot
+
+**Data Processing:**
+- `resume_parser.py` - spaCy-based NLP for skill extraction
+- `utils.py` - Helper functions for text processing
+- `database.py` - Neon PostgreSQL connection and queries
+
+**External Integrations:**
+- `api_services.py` - Jooble API for global job listings
+- `job_scrapers.py` - Internshala web scraping
+- `Courses.py` - Course recommendation logic
+
+**ML Model:**
+- `resume_classifier_v2.pkl` - Logistic Regression + TF-IDF (99.5% accuracy)
+- `UpdatedResumeDataSet.csv` - 962 resume samples, 25 categories
+- `ResumeClassification_Model.ipynb` - Training notebook (Google Colab)
+
+**Configuration:**
+- `.env.example` - Template for API keys (Gemini, Database)
+- `.streamlit/config.toml` - Streamlit theme and settings
+- `requirements.txt` - 30+ Python packages
+
+**Documentation:**
+- `README.md` - Complete project documentation
+- `LICENSE` - MIT License
+- `PRIVACY.md` - Privacy policy for users
 
 ---
 
