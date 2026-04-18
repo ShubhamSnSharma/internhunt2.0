@@ -45,31 +45,50 @@ warnings.filterwarnings("ignore", message="coroutine 'expire_cache' was never aw
 
 @st.cache_resource
 def load_resume_classifier():
-    """Load the trained resume classification model (with version compatibility check)"""
+    """
+    Load the trained resume classification model.
+
+    Supports both:
+      - Old format: plain Pipeline (LogisticRegression)
+      - New format: dict with 'model' key (MLPClassifier — upgraded)
+
+    Logs the model type so the UI can display it correctly.
+    """
     import sklearn
 
     try:
         data = joblib.load("resume_classifier_v2.pkl")
 
-        # Handle both new and old formats safely
         if isinstance(data, dict) and "model" in data:
             model = data["model"]
             trained_version = data.get("sklearn_version", "unknown")
+            model_type = data.get("model_type", "Unknown")
 
-            # Optional warning if sklearn versions differ
+            # Attach metadata to model object so UI can read it
+            model._internhunt_model_type = model_type
+            model._internhunt_architecture = data.get(
+                "architecture", "TF-IDF → Classifier"
+            )
+
             if trained_version != sklearn.__version__:
                 st.warning(
                     f"⚠️ Model trained on scikit-learn {trained_version}, "
-                    f"but running on {sklearn.__version__}. Retraining recommended if unexpected issues occur."
+                    f"running on {sklearn.__version__}. "
+                    f"Retraining recommended if unexpected issues occur."
                 )
         else:
-            # fallback for older pickled models (without metadata)
+            # Backward-compatible fallback for older .pkl without metadata
             model = data
+            model._internhunt_model_type = "LogisticRegression"
+            model._internhunt_architecture = "TF-IDF(5000) → LogisticRegression"
 
         return model
 
     except FileNotFoundError:
-        st.error("❌ Model file not found. Please ensure 'resume_classifier_v2.pkl' exists in the project directory.")
+        st.error(
+            "❌ Model file not found. "
+            "Please ensure 'resume_classifier_v2.pkl' exists in the project directory."
+        )
         return None
 
     except Exception as e:
@@ -77,30 +96,77 @@ def load_resume_classifier():
         return None
 
 
+def fuzzy_label(probability: float) -> str:
+    """
+    Assign a fuzzy linguistic confidence label to a classifier probability.
+
+    Soft Computing concept: instead of binary (yes/no), the model output is
+    interpreted through fuzzy membership regions:
+
+      High   : p > 0.70  — dominant, highly confident prediction
+      Medium : 0.40 ≤ p ≤ 0.70  — uncertain overlap zone (alternative role)
+      Low    : p < 0.40  — weak secondary signal
+
+    This converts the neural network's crisp probability into a
+    human-readable, linguistically meaningful confidence grade.
+    """
+    if probability > 0.70:
+        return "High"
+    elif probability >= 0.40:
+        return "Medium"
+    else:
+        return "Low"
+
+
 def predict_resume_category(resume_text, model=None):
-    """Predict resume category and return top 3 predictions with probabilities"""
+    """
+    Predict resume job category using the trained pipeline.
+
+    Returns:
+        predicted_category (str): The top predicted role.
+        top_3_predictions (list[dict]): Top-3 predictions, each containing:
+            - 'category'    : str   — role name
+            - 'probability' : float — raw probability from predict_proba()
+            - 'fuzzy_label' : str   — 'High' | 'Medium' | 'Low'
+
+    Example output:
+        (
+            "Data Science",
+            [
+                {"category": "Data Science",     "probability": 0.82, "fuzzy_label": "High"},
+                {"category": "Business Analyst", "probability": 0.12, "fuzzy_label": "Medium"},
+                {"category": "Database",         "probability": 0.06, "fuzzy_label": "Low"}
+            ]
+        )
+    """
     if model is None:
         model = load_resume_classifier()
-    
+
     if model is None:
         return None, []
-    
+
     try:
-        # Get prediction
+        # Primary prediction
         predicted_category = model.predict([resume_text])[0]
-        
-        # Get probabilities for top 3
+
+        # Probability vector over all classes
         probabilities = model.predict_proba([resume_text])[0]
         classes = model.classes_
-        
-        # Get top 3 predictions
+
+        # Top-3 indices sorted by descending probability
         top_3_idx = probabilities.argsort()[-3:][::-1]
+
         top_3_predictions = [
-            {"category": classes[idx], "probability": probabilities[idx]}
+            {
+                "category"   : classes[idx],
+                "probability": float(probabilities[idx]),
+                "fuzzy_label": fuzzy_label(probabilities[idx]),   # ← NEW
+            }
             for idx in top_3_idx
         ]
-        
+
         return predicted_category, top_3_predictions
+
     except Exception as e:
         st.error(f"Error predicting category: {e}")
         return None, []
@@ -2376,18 +2442,30 @@ def main():
                 # ML Category Prediction Badge
                 predicted_cat = resume_data.get('predicted_category')
                 top_3 = resume_data.get('top_3_categories', [])
-                
+
                 if predicted_cat and top_3:
                     confidence = top_3[0]['probability'] * 100 if top_3 else 0
-                    
-                    # Build top 3 predictions HTML
+
+                    # Resolve model type label for display
+                    _model_obj = load_resume_classifier()
+                    _model_type_label = getattr(_model_obj, '_internhunt_model_type', 'Neural Network')
+
+                    # Build top-3 predictions HTML with fuzzy confidence labels
                     top_3_html = ""
                     for i, pred in enumerate(top_3[:3]):
-                        prob = pred['probability'] * 100
+                        prob    = pred['probability'] * 100
                         category = pred['category']
-                        icon = "🎯" if i == 0 else "🔹" if i == 1 else "🔸"
-                        top_3_html += f'<div class="pred-item">{icon} <span class="pred-cat">{category}</span> <span class="pred-prob">{prob:.1f}%</span></div>'
-                    
+                        fl      = pred.get('fuzzy_label', 'Low')   # High / Medium / Low
+                        icon    = "🎯" if i == 0 else "🔹" if i == 1 else "🔸"
+                        fl_cls  = f"fuzzy-{fl.lower()}"
+                        top_3_html += (
+                            f'<div class="pred-item">'
+                            f'{icon} <span class="pred-cat">{category}</span>'
+                            f'<span class="pred-prob">{prob:.1f}%</span>'
+                            f'<span class="{fl_cls}">{fl}</span>'
+                            f'</div>'
+                        )
+
                     st.markdown(f"""
                     <style>
                     .ml-prediction-card {{
@@ -2403,9 +2481,7 @@ def main():
                     .ml-prediction-card::before {{
                         content: '';
                         position: absolute;
-                        top: 0;
-                        left: 0;
-                        right: 0;
+                        top: 0; left: 0; right: 0;
                         height: 3px;
                         background: linear-gradient(90deg, #6366F1, #8B5CF6, #06B6D4);
                     }}
@@ -2416,74 +2492,65 @@ def main():
                         margin-bottom: 16px;
                     }}
                     .ml-icon {{
-                        width: 42px;
-                        height: 42px;
+                        width: 42px; height: 42px;
                         background: linear-gradient(135deg, #6366F1, #8B5CF6);
                         border-radius: 12px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
+                        display: flex; align-items: center; justify-content: center;
                         font-size: 20px;
                         box-shadow: 0 6px 18px rgba(99, 102, 241, 0.3);
                     }}
                     .ml-title {{
-                        font-size: 18px;
-                        font-weight: 800;
-                        color: #E6EAF3;
-                        margin: 0;
+                        font-size: 18px; font-weight: 800;
+                        color: #E6EAF3; margin: 0; flex: 1;
+                    }}
+                    .ml-model-chip {{
+                        font-size: 11px; font-weight: 700;
+                        padding: 3px 10px; border-radius: 999px;
+                        background: rgba(139, 92, 246, 0.15);
+                        border: 1px solid rgba(139, 92, 246, 0.4);
+                        color: #a78bfa; letter-spacing: 0.04em;
                     }}
                     .ml-badge {{
-                        display: inline-flex;
-                        align-items: center;
-                        gap: 8px;
-                        padding: 10px 16px;
-                        border-radius: 12px;
-                        background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.15));
+                        display: inline-flex; align-items: center; gap: 8px;
+                        padding: 10px 16px; border-radius: 12px;
+                        background: linear-gradient(135deg, rgba(99,102,241,0.2), rgba(139,92,246,0.15));
                         border: 1px solid rgba(99, 102, 241, 0.4);
                         margin-bottom: 14px;
                     }}
-                    .ml-badge-label {{
-                        font-size: 14px;
-                        color: #A6ADBB;
-                        font-weight: 600;
-                    }}
-                    .ml-badge-value {{
-                        font-size: 18px;
-                        color: #E6EAF3;
-                        font-weight: 800;
-                    }}
-                    .ml-badge-conf {{
-                        font-size: 13px;
-                        color: #22C55E;
-                        font-weight: 700;
-                        background: rgba(34, 197, 94, 0.15);
-                        padding: 4px 10px;
-                        border-radius: 8px;
-                        border: 1px solid rgba(34, 197, 94, 0.3);
+                    .ml-badge-label {{ font-size:14px; color:#A6ADBB; font-weight:600; }}
+                    .ml-badge-value {{ font-size:18px; color:#E6EAF3; font-weight:800; }}
+                    .ml-badge-conf  {{
+                        font-size:13px; color:#22C55E; font-weight:700;
+                        background:rgba(34,197,94,0.15); padding:4px 10px;
+                        border-radius:8px; border:1px solid rgba(34,197,94,0.3);
                     }}
                     .top-predictions {{
-                        display: flex;
-                        flex-direction: column;
-                        gap: 8px;
+                        display: flex; flex-direction: column; gap: 8px;
                         padding: 14px;
-                        background: rgba(255, 255, 255, 0.02);
+                        background: rgba(255,255,255,0.02);
                         border-radius: 12px;
-                        border: 1px solid rgba(255, 255, 255, 0.06);
+                        border: 1px solid rgba(255,255,255,0.06);
+                    }}
+                    .top-pred-header {{
+                        font-size:11px; font-weight:700; color:#6b7280;
+                        letter-spacing:0.08em; text-transform:uppercase; margin-bottom:4px;
                     }}
                     .pred-item {{
-                        display: flex;
-                        align-items: center;
-                        gap: 10px;
-                        font-size: 14px;
-                        color: #D9E2F1;
+                        display:flex; align-items:center; gap:10px;
+                        font-size:14px; color:#D9E2F1;
                     }}
-                    .pred-cat {{
-                        flex: 1;
-                        font-weight: 600;
-                    }}
-                    .pred-prob {{
-                        font-weight: 700;
-                        color: #8B5CF6;
+                    .pred-cat  {{ flex:1; font-weight:600; }}
+                    .pred-prob {{ font-weight:700; color:#8B5CF6; min-width:52px; text-align:right; }}
+                    /* Fuzzy label badges */
+                    .fuzzy-high   {{ font-size:11px; font-weight:700; padding:2px 8px; border-radius:999px;
+                                     background:rgba(34,197,94,0.15); border:1px solid rgba(34,197,94,0.4); color:#22c55e; }}
+                    .fuzzy-medium {{ font-size:11px; font-weight:700; padding:2px 8px; border-radius:999px;
+                                     background:rgba(234,179,8,0.15);  border:1px solid rgba(234,179,8,0.4);  color:#eab308; }}
+                    .fuzzy-low    {{ font-size:11px; font-weight:700; padding:2px 8px; border-radius:999px;
+                                     background:rgba(239,68,68,0.12);  border:1px solid rgba(239,68,68,0.35); color:#f87171; }}
+                    .fuzzy-legend {{
+                        font-size:11px; color:#4b5563; margin-top:10px;
+                        padding-top:8px; border-top:1px solid rgba(255,255,255,0.05);
                     }}
                     </style>
                     
@@ -2491,6 +2558,7 @@ def main():
                         <div class="ml-header">
                             <div class="ml-icon">🤖</div>
                             <div class="ml-title">AI-Detected Profile</div>
+                            <span class="ml-model-chip">⚡ {_model_type_label}</span>
                         </div>
                         <div class="ml-badge">
                             <span class="ml-badge-label">Category:</span>
@@ -2498,8 +2566,10 @@ def main():
                             <span class="ml-badge-conf">{confidence:.1f}% match</span>
                         </div>
                         <div class="top-predictions">
+                            <div class="top-pred-header">Top 3 Predictions · Fuzzy Confidence</div>
                             {top_3_html}
-                    </div>
+                            <div class="fuzzy-legend">🟢 High &gt;70% &nbsp;|&nbsp; 🟡 Medium 40–70% &nbsp;|&nbsp; 🔴 Low &lt;40%</div>
+                        </div>
                     </div>
                     """, unsafe_allow_html=True)
 
@@ -3811,4 +3881,4 @@ def main():
                 """,unsafe_allow_html=True)
 
 if __name__ == "__main__":
-    main()
+    main() 
